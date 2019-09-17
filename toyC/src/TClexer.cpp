@@ -59,7 +59,7 @@ namespace toycalc {
       do {
         lexeme += charBuff; charBuff = getChar();
       } while(isalpha(charBuff) || isdigit(charBuff));
-   
+ 
       if (equalIgnoreCase(lexeme,std::string("WRITE")))
         t = new TCtoken(WRITE);
       else if (equalIgnoreCase(lexeme,"READ"))
@@ -84,13 +84,21 @@ namespace toycalc {
       switch (charBuff) {
             case '+': t = new TCtoken(ADDOP,"+"); charBuff = getChar(); break;
             case '-': t = new TCtoken(ADDOP,"-"); charBuff = getChar(); break;
+			case '|': charBuff = getChar();
+					  if (charBuff == '|') {
+						  t = new TCtoken(ADDOP,"||"); charBuff = getChar(); break; 
+						  
             case '*': t = new TCtoken(MULOP,"*"); charBuff = getChar(); break;
-            case '/': t = new TCtoken(MULOP,"/"); charBuff = getChar(); break;
+            case '%': t = new TCtoken(MULOP,"%"); charBuff = getChar(); break;
+			case '&': charBuff = getChar();
+					  if (charBuff == '&') {
+						  t = new TCtoken(MULOP,"&&"); charBuff = getChar(); break;
+						  
+			//put forward slash here
+			
             case '<': charBuff = getChar();
                       if (charBuff == '=') {
                           t = new TCtoken(RELOP,"<="); charBuff = getChar();
-                      } else if (charBuff == '>') {
-                          t = new TCtoken(RELOP,"<>"); charBuff = getChar();
                       } else
                           t = new TCtoken(RELOP,"<");
                       break;
@@ -100,14 +108,27 @@ namespace toycalc {
                       } else
                           t = new TCtoken(RELOP,">");
                       break;
+					  
             case '(': t = new TCtoken(LPAREN); charBuff = getChar(); break;
             case ')': t = new TCtoken(RPAREN); charBuff = getChar(); break;
+			case '{': t = new TCtoken(LCURLY); charBuff = getChar(); break;
+            case '}': t = new TCtoken(RCURLY); charBuff = getChar(); break;
+			case '[': t = new TCtoken(LBRACKET); charBuff = getChar(); break;
+            case ']': t = new TCtoken(RBRACKET); charBuff = getChar(); break;
+			
             case '=': charBuff = getChar();
                       if (charBuff == '=') {
                           t = new TCtoken(RELOP,"=="); charBuff = getChar();
                       } else
                           t = new TCtoken(ASSIGN);
                       break;
+			case '!': charBuff = getChar();
+                      if (charBuff == '=') {
+                          t = new TCtoken(RELOP,"!="); charBuff = getChar();
+                      } else
+                          t = new TCtoken(NOT);
+                      break;		  
+            case ',': t = new TCtoken(COMMA); charBuff = getChar(); break;
             case ';': t = new TCtoken(SEMICOLON); charBuff = getChar(); break;
             case ':': t = new TCtoken(COLON);     charBuff = getChar(); break;
             default: // shouldn't happen!
