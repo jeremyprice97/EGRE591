@@ -2,7 +2,7 @@
 #define TCOUTPUT_H
 
 #include "TClexer.h"
-#include "ASabstractSyntax.h"
+//#include "ASabstractSyntax.h"
 #include "TCsymTable.h"
 
 namespace toycalc {
@@ -14,7 +14,7 @@ namespace toycalc {
   void reportSEMANTIC_ERROR(std::string);
 
 
-  void dumpAST(ASabstractSyntax* ast);
+  //void dumpAST(ASabstractSyntax* ast);
   void dumpST(TCsymTable* st);
 //void dumpCode((TargetCode type)* code);
   

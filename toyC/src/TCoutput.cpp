@@ -45,9 +45,9 @@ namespace toycalc {
     std::cerr << ("%error: "+ message) << std::endl;
   }
 
-  void dumpAST(ASabstractSyntax* ast) {
+  /*void dumpAST(ASabstractSyntax* ast) {
     std::cout << "abstract syntax tree:" << std::endl << ast->toString() << std::endl;
-  }
+  }*/
 
   void dumpST(TCsymTable* st) {
     std::cout << "symbol table:" << std::endl << st->toString() << std::endl;

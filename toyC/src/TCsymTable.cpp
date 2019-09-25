@@ -1,6 +1,10 @@
 #include "TCsymbol.h"
 #include "TCsymTable.h"
 
+
+/*Provided by Dr. Resler*/
+
+
 namespace toycalc {
 
   TCsymTable::TCsymTable() { size = 0; }

@@ -47,58 +47,77 @@ namespace toycalc {
       } while(isdigit(charBuff));
       if (charBuff == '.') {									//decimal point
         lexeme += charBuff; charBuff = getChar();
-        if (!isdigit(charBuff))
-          reportWARNING("","illegal character ignored 1");
+        //if (!isdigit(charBuff))
+          //reportWARNING("","state 1: illegal character "+lexeme+" ignored 1");
         //          reportWARNING("","illegal character '"+charBuff+"' ignored");
-          do {
+		if(isdigit(charBuff)){
+		  do {
             lexeme += charBuff; charBuff = getChar();
           } while(isdigit(charBuff));
 		  if(charBuff == 'E') {									//E with digit for exponent
 			lexeme += charBuff; charBuff = getChar();
-			if(isdigit(charBuff){								//digit(s) after E
+			if(isdigit(charBuff)){								//digit(s) after E
 				do {
 					lexeme += charBuff; charBuff = getChar();
 				} while(isdigit(charBuff));
 			}
-			if(charBuff == '+' || charBuff == '-'){				//+ or - after E
+			else if(charBuff == '+' || charBuff == '-'){				//+ or - after E
 				lexeme += charBuff; charBuff = getChar();
-				if(isdigit(charBuff){							//digit(s) after + or -
+				if(isdigit(charBuff)){							//digit(s) after + or -
 					do {
 						lexeme += charBuff; charBuff = getChar();
 					} while(isdigit(charBuff));
 				}
 				else{
-					reportWARNING("","illegal character ignored 1");
+					reportWARNING("","state 3: illegal character "+lexeme+" ignored 1");
+					t = new TCtoken(-1);
+					return t;
 				}
 			} else {
-				reportWARNING("","illegal character ignored 1");
+				reportWARNING("","state 4: illegal character "+lexeme+" ignored 1");
+				t = new TCtoken(-1);
+				return t;
 			}
 		  }
-		  else{
-			reportWARNING("","illegal character ignored 1");
-		  }
+		  /*else{
+			reportWARNING("","state 5: illegal character "+lexeme+" ignored 1");
+		  }*/
+		} else{
+			reportWARNING("","state 8: illegal character "+lexeme+" ignored 1"); charBuff = getChar();
+			t = new TCtoken(-1);
+			return t;
+		}
       }
 	  else if(charBuff == 'E') {								//E after digits, no decimal point
 		    lexeme += charBuff; charBuff = getChar();
-		    if(isdigit(charBuff){									//digit(s) after E
+		    if(isdigit(charBuff)){									//digit(s) after E
 				do {
 					lexeme += charBuff; charBuff = getChar();
 				} while(isdigit(charBuff));
 			}
-			if(charBuff == '+' || charBuff == '-'){				//+ or - after E
-				if(isdigit(charBuff){							//digit(s) after + or -
+			else if(charBuff == '+' || charBuff == '-'){				//+ or - after E
+				lexeme += charBuff; charBuff = getChar();
+				if(isdigit(charBuff)){							//digit(s) after + or -
 					do {
 						lexeme += charBuff; charBuff = getChar();
 					} while(isdigit(charBuff));
 				}
 				else{
-					reportWARNING("","illegal character ignored 1");
+					reportWARNING("","state 6: illegal character "+lexeme+" ignored 1");
+					t = new TCtoken(-1);
+					return t;
 				}
+			} else {
+				reportWARNING("","state 7: illegal character "+lexeme+" ignored 1");
+				t = new TCtoken(-1);
+				return t;
 			}
 	  }
-	  else{
-			reportWARNING("","illegal character ignored 1");
-	  }
+	  /*else{
+			reportWARNING("","illegal character "+lexeme+" ignored 1");
+			t = new TCtoken(-1);
+			return t;
+	  }*/
       t = new TCtoken(NUMBER,lexeme);
     } else if (isalpha(charBuff)) {							//keywords or IDs
       do {
@@ -136,7 +155,7 @@ namespace toycalc {
 	  else if (equalIgnoreCase(lexeme,"BREAK"))
         t = new TCtoken(BREAK);
 	  else if (equalIgnoreCase(lexeme,"NEWLINE"))					//probably not needed
-        t = new TCtoken(NEWLINE);
+        t = new TCtoken(NEWLINE,"newline word");
       else {
         t = new TCtoken(ID,lexeme);
       }
@@ -150,7 +169,9 @@ namespace toycalc {
 						  t = new TCtoken(ADDOP,"||"); charBuff = getChar(); break; 
 					  }
 					  else{
-						  reportWARNING("","illegal character ignored 1");
+						  reportWARNING("","illegal character "+lexeme+" ignored 1");
+						  t = new TCtoken(-1);
+						  break;
 					  }
             case '*': t = new TCtoken(MULOP,"*"); charBuff = getChar(); break;
             case '%': t = new TCtoken(MULOP,"%"); charBuff = getChar(); break;
@@ -159,10 +180,12 @@ namespace toycalc {
 						  t = new TCtoken(MULOP,"&&"); charBuff = getChar(); break;
 					  }
 					  else{
-						  reportWARNING("","illegal character ignored 1");
+						  reportWARNING("","illegal character "+lexeme+" ignored 1");
+						  t = new TCtoken(-1);
+						  break;
 					  }					  
-			case '/': charBuff = getChar();								//put forward slash here
-					  if (charBuff == '*') {
+			case '/': t = new TCtoken(MULOP,"/"); charBuff = getChar();	break;	//put forward slash here
+					  /*if (charBuff == '*') {
 						  do {
 							charBuff = getChar();
 							if (charBuff == '*') {
@@ -171,39 +194,47 @@ namespace toycalc {
 								} while(charBuff == '*');
 								
 								if (charBuff == '/') {
+									charBuff = getChar();
 									break;
 								}
 							}
 						  } while(charBuff != EOFCHAR);
 					  } else
                           t = new TCtoken(MULOP,"/");
-                      break;
+                      break;*/
 			case '\'': charBuff = getChar();								//put char literal here
 					  if (charBuff == '\n') {
-						  reportWARNING("","illegal character ignored 1");
+						  reportWARNING("","char state 1: illegal character "+lexeme+" ignored 1");
+						  t = new TCtoken(-1);
 						  break;
 					  } else if (charBuff == '\'') {
-						  t = new TCtoken(CHARLITERAL,"\0"); charBuff = getChar(); break;
+						  lexeme += charBuff;
+						  t = new TCtoken(CHARLITERAL,lexeme); charBuff = getChar(); break;
 					  } else {
 						  lexeme += charBuff; charBuff = getChar();
 						  if (charBuff == '\'') {
+							  lexeme += charBuff;
 							  t = new TCtoken(CHARLITERAL,lexeme); charBuff = getChar(); break;
 						  } else {
-							  reportWARNING("","illegal character ignored 1");
+							  reportWARNING("","char state 2: illegal character "+lexeme+" ignored 1");
+							  t = new TCtoken(-1);
 							  break;
 						  }
 					  }
 			case '\"': charBuff = getChar();								//put string here
 					  if (charBuff == '\n') {
-						  reportWARNING("","illegal character ignored 1");
+						  reportWARNING("","string state 1: illegal character "+lexeme+" ignored 1");
+						  t = new TCtoken(-1);
 						  break;
 					  } else if (charBuff == '\"') {
-						  t = new TCtoken(STRING,"\0"); charBuff = getChar(); break;
+						  lexeme += charBuff;
+						  t = new TCtoken(STRING,lexeme); charBuff = getChar(); break;
 					  } else {
 						  lexeme += charBuff; charBuff = getChar();
 						  do {
 							lexeme += charBuff; charBuff = getChar();
-						  } while(charBuff != "\"");
+						  } while(charBuff != '\"');
+						  lexeme += charBuff;
 						  t = new TCtoken(STRING,lexeme); charBuff = getChar(); break;
 					  }
 			
@@ -231,7 +262,7 @@ namespace toycalc {
                       if (charBuff == '=') {
                           t = new TCtoken(RELOP,"=="); charBuff = getChar();
                       } else
-                          t = new TCtoken(ASSIGN);
+                          t = new TCtoken(ASSIGNOP);
                       break;
 			case '!': charBuff = getChar();
                       if (charBuff == '=') {
@@ -242,16 +273,16 @@ namespace toycalc {
             case ',': t = new TCtoken(COMMA); charBuff = getChar(); break;
             case ';': t = new TCtoken(SEMICOLON); charBuff = getChar(); break;
             case ':': t = new TCtoken(COLON);     charBuff = getChar(); break;
-			case '\n': t = new TCtoken(NEWLINE);     charBuff = getChar(); break;
+			case '\n': t = new TCtoken(NEWLINE,"/n");     charBuff = getChar(); break;
             default: // shouldn't happen!
-              t = new TCtoken(NONE);
+              t = new TCtoken(NONE); break;
             }
         }
         if (verbose) reportDEBUG("  ","scanner",t->toString());
         return t;
-	}																								//added this } because something didn't match up
+																									//added this } because something didn't match up
   }
-
+  
   std::string TClexer::getLine() { return line; }
   std::string TClexer::getLexeme() { return lexeme; }
   int TClexer::getPos() { return pos; }
@@ -266,9 +297,21 @@ namespace toycalc {
         line = getNextLine();
         ch = line[pos];
       }
+	  if((ch == '/') && (line[pos+1] == '*')) {
+		  pos++;
+		  while(!((ch == '*') && (line[pos+1] == '/'))) {
+			 // printf("ch: %c, line[pos+1]: %c\n", ch, line[pos+1]);
+			  pos++;
+			  
+			  if (line.empty() || pos > line.length()) line = getNextLine();
+			  ch = line[pos];
+		  }
+		  pos += 2;
+	  }
       if (isInAlphabet(ch) || isspace(ch)) break;
         
-      reportWARNING("","illegal character ignored 2");
+      reportWARNING("","illegal character "+lexeme+" ignored 2");
+	  //printf("%c",ch);
       //      reportWARNING("","illegal character '"+line[pos]+"' ignored")
       pos++;
       
@@ -289,7 +332,10 @@ bool isInAlphabet(char ch) {
   return ( isalpha(ch) || isdigit(ch) ||
   	 (ch == '+') || (ch == '-') || (ch == '*') || (ch == '/') ||
   	 (ch == '<') || (ch == '>') || (ch == '(') || (ch == ')') || 
-         (ch == '=') || (ch == ';') || (ch == ':') ); 
+     (ch == '=') || (ch == ';') || (ch == ':') || (ch == '%') ||
+	 (ch == '{') || (ch == '}') || (ch == '[') || (ch == ']') ||
+	 (ch == '\'') || (ch == '\"') || (ch == '!') || (ch == '&') ||
+	 (ch == '|') || (ch == ',') || (ch == '\n') || (ch == '.')); 
 }
 
 bool compareChar(char& c1, char& c2){
