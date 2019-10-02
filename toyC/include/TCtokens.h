@@ -1,5 +1,6 @@
 #ifndef TCTOKENS_H
 #define TCTOKENS_H
+/*Provided by Dr. Resler, expanded to include more */
 
 namespace toycalc {
   

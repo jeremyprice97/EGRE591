@@ -1,4 +1,4 @@
-CC := g++ # This is the main compiler
+CC := g++ # This is the main compiler provided by Dr. Resler
 
 SRCDIR := src
 INCDIR := include

@@ -5,6 +5,8 @@
 #include "TCglobals.h"
 #include "TCtokens.h"
 
+/*Provided by Dr. Resler*/
+
 using namespace toycalc;
 using namespace std;
 

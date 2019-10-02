@@ -1,4 +1,5 @@
 #include "TCsymbol.h"
+/*Provided by Dr. Resler*/
 
 namespace toycalc {
 

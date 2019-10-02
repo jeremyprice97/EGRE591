@@ -3,6 +3,7 @@
 
 #include "TCsymbol.h"
 #include "TCtoken.h"
+/*Provided by Dr. Resler*/
 
 #define MAX_SYMS 100 // arbitrary
 

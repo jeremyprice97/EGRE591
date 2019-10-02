@@ -6,6 +6,8 @@
 #include "TCglobals.h"
 #include "TCtokens.h"
 #include "TCoutput.h"
+/*Provided by Dr. Resler, expanded to include more 
+The changes that were made are noted to the side*/
 
 namespace toycalc {
 
@@ -45,7 +47,7 @@ namespace toycalc {
       do {
         lexeme += charBuff; charBuff = getChar();
       } while(isdigit(charBuff));
-      if (charBuff == '.') {									//decimal point
+      if (charBuff == '.') {									/*start of new code added my Matthew and Jeremy*///decimal point
         lexeme += charBuff; charBuff = getChar();
         //if (!isdigit(charBuff))
           //reportWARNING("","state 1: illegal character "+lexeme+" ignored 1");
@@ -112,7 +114,7 @@ namespace toycalc {
 				t = new TCtoken(-1);
 				return t;
 			}
-	  }
+	  }															/*end of new code added my Matthew and Jeremy*/
 	  /*else{
 			reportWARNING("","illegal character "+lexeme+" ignored 1");
 			t = new TCtoken(-1);
@@ -120,8 +122,8 @@ namespace toycalc {
 	  }*/
       t = new TCtoken(NUMBER,lexeme);
     } else if (isalpha(charBuff)) {							//keywords or IDs
-      do {
-        lexeme += charBuff; charBuff = getChar();
+      do {													/*start of new code added my Matthew and Jeremy*/
+        lexeme += charBuff; charBuff = getChar();			/*Various keywords that were not alrady provided were added*/
       } while(isalpha(charBuff) || isdigit(charBuff));
  
       if (equalIgnoreCase(lexeme,std::string("INT")))
@@ -154,17 +156,17 @@ namespace toycalc {
         t = new TCtoken(CONTINUE);
 	  else if (equalIgnoreCase(lexeme,"BREAK"))
         t = new TCtoken(BREAK);
-	  else if (equalIgnoreCase(lexeme,"NEWLINE"))					//probably not needed
+	  else if (equalIgnoreCase(lexeme,"NEWLINE"))
         t = new TCtoken(NEWLINE,"newline word");
       else {
         t = new TCtoken(ID,lexeme);
-      }
+      }													/*end of changes made to code added my Matthew and Jeremy*/
     } else {
       lexeme += charBuff;
       switch (charBuff) {
             case '+': t = new TCtoken(ADDOP,"+"); charBuff = getChar(); break;
             case '-': t = new TCtoken(ADDOP,"-"); charBuff = getChar(); break;
-			case '|': charBuff = getChar();
+			case '|': charBuff = getChar();						/*this case added my Matthew and Jeremy*/
 					  if (charBuff == '|') {
 						  t = new TCtoken(ADDOP,"||"); charBuff = getChar(); break; 
 					  }
@@ -174,8 +176,8 @@ namespace toycalc {
 						  break;
 					  }
             case '*': t = new TCtoken(MULOP,"*"); charBuff = getChar(); break;
-            case '%': t = new TCtoken(MULOP,"%"); charBuff = getChar(); break;
-			case '&': charBuff = getChar();
+            case '%': t = new TCtoken(MULOP,"%"); charBuff = getChar(); break; 			/*this case added my Matthew and Jeremy*/
+			case '&': charBuff = getChar();						/*this case added my Matthew and Jeremy*/
 					  if (charBuff == '&') {
 						  t = new TCtoken(MULOP,"&&"); charBuff = getChar(); break;
 					  }
@@ -184,7 +186,7 @@ namespace toycalc {
 						  t = new TCtoken(-1);
 						  break;
 					  }					  
-			case '/': t = new TCtoken(MULOP,"/"); charBuff = getChar();	break;	//put forward slash here
+			case '/': t = new TCtoken(MULOP,"/"); charBuff = getChar();	break;		/*this case modified my Matthew and Jeremy*/
 					  /*if (charBuff == '*') {
 						  do {
 							charBuff = getChar();
@@ -202,7 +204,7 @@ namespace toycalc {
 					  } else
                           t = new TCtoken(MULOP,"/");
                       break;*/
-			case '\'': charBuff = getChar();								//put char literal here
+			case '\'': charBuff = getChar();									/*this case added my Matthew and Jeremy*/
 					  if (charBuff == '\n') {
 						  reportWARNING("","char state 1: illegal character "+lexeme+" ignored 1");
 						  t = new TCtoken(-1);
@@ -221,7 +223,7 @@ namespace toycalc {
 							  break;
 						  }
 					  }
-			case '\"': charBuff = getChar();								//put string here
+			case '\"': charBuff = getChar();							/*this case added my Matthew and Jeremy*/
 					  if (charBuff == '\n') {
 						  reportWARNING("","string state 1: illegal character "+lexeme+" ignored 1");
 						  t = new TCtoken(-1);
@@ -253,10 +255,10 @@ namespace toycalc {
 					  
             case '(': t = new TCtoken(LPAREN); charBuff = getChar(); break;
             case ')': t = new TCtoken(RPAREN); charBuff = getChar(); break;
-			case '{': t = new TCtoken(LCURLY); charBuff = getChar(); break;
-            case '}': t = new TCtoken(RCURLY); charBuff = getChar(); break;
-			case '[': t = new TCtoken(LBRACKET); charBuff = getChar(); break;
-            case ']': t = new TCtoken(RBRACKET); charBuff = getChar(); break;
+			case '{': t = new TCtoken(LCURLY); charBuff = getChar(); break;		/*this case added my Matthew and Jeremy*/
+            case '}': t = new TCtoken(RCURLY); charBuff = getChar(); break;		/*this case added my Matthew and Jeremy*/
+			case '[': t = new TCtoken(LBRACKET); charBuff = getChar(); break;		/*this case added my Matthew and Jeremy*/
+            case ']': t = new TCtoken(RBRACKET); charBuff = getChar(); break;		/*this case added my Matthew and Jeremy*/
 			
             case '=': charBuff = getChar();
                       if (charBuff == '=') {
@@ -264,16 +266,16 @@ namespace toycalc {
                       } else
                           t = new TCtoken(ASSIGNOP);
                       break;
-			case '!': charBuff = getChar();
+			case '!': charBuff = getChar();									/*this case added my Matthew and Jeremy*/
                       if (charBuff == '=') {
                           t = new TCtoken(RELOP,"!="); charBuff = getChar();
                       } else
                           t = new TCtoken(NOT);
                       break;		  
-            case ',': t = new TCtoken(COMMA); charBuff = getChar(); break;
+            case ',': t = new TCtoken(COMMA); charBuff = getChar(); break;		/*this case added my Matthew and Jeremy*/
             case ';': t = new TCtoken(SEMICOLON); charBuff = getChar(); break;
             case ':': t = new TCtoken(COLON);     charBuff = getChar(); break;
-			case '\n': t = new TCtoken(NEWLINE,"/n");     charBuff = getChar(); break;
+			case '\n': t = new TCtoken(NEWLINE,"/n");     charBuff = getChar(); break;			/*this case added my Matthew and Jeremy*/
             default: // shouldn't happen!
               t = new TCtoken(NONE); break;
             }
@@ -297,7 +299,7 @@ namespace toycalc {
         line = getNextLine();
         ch = line[pos];
       }
-	  if((ch == '/') && (line[pos+1] == '*')) {
+	  if((ch == '/') && (line[pos+1] == '*')) {									/*this case added my Matthew and Jeremy*/
 		  pos++;
 		  while(!((ch == '*') && (line[pos+1] == '/'))) {
 			 // printf("ch: %c, line[pos+1]: %c\n", ch, line[pos+1]);
@@ -328,7 +330,7 @@ std::string getNextLine() {
   return line;
 }
 
-bool isInAlphabet(char ch) {
+bool isInAlphabet(char ch) {									/*various characters added my Matthew and Jeremy*/
   return ( isalpha(ch) || isdigit(ch) ||
   	 (ch == '+') || (ch == '-') || (ch == '*') || (ch == '/') ||
   	 (ch == '<') || (ch == '>') || (ch == '(') || (ch == ')') || 

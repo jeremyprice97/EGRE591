@@ -2,6 +2,7 @@
 
 #ifndef TCSYMBOL_H
 #define TCSYMBOL_H
+/*Provided by Dr. Resler*/
 
 namespace toycalc {
 
