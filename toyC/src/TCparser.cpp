@@ -101,22 +101,80 @@ namespace toycalc{
 	}
 	
 	int TCparser::formalParamList(){
-
+	    enteringDEBUG("formalParamList");
+	    num = type();
+        if(buff->getTokenType() == ID) {
+            buff = scanner->getToken();
+        } else {
+            reportSYNTAX_ERROR(scanner, "identifier expected");
+            exit(EXIT_FAILURE);
+        }
+        while (buff->getTokenType() == COMMA){
+            num = type();
+            if(buff->getTokenType() == ID) {
+                buff = scanner->getToken();
+            } else {
+                reportSYNTAX_ERROR(scanner, "identifier expected");
+                exit(EXIT_FAILURE);
+            }
+        }
+        exitingDEBUG("formalParamList");
         return 0;
 	}
 	
 	int TCparser::statement(){
-
+        enteringDEBUG("statement");
+        if(buff->getTokenType() == ID || buff->getTokenType() == NUMBER || buff->getTokenType() == STRING || buff->getTokenType() == CHARLITERAL || buff->getTokenType() == LPAREN || buff->getTokenType() == ADDOP || buff->getTokenType() == NOT){
+            num = expressionStatement();
+        }
+        else if(buff->getTokenType() == BREAK) {
+            num = breakStatement();
+        }
+        else if(buff->getTokenType() == LCURLY) {
+            num = compoundStatement();
+        }
+        else if(buff->getTokenType() == IF) {
+            num = ifStatement();
+        }
+        else if(buff->getTokenType() == SEMICOLON) {
+            num = nullStatement();
+        }
+        else if(buff->getTokenType() == RETURN) {
+            num = returnStatement();
+        }
+        else if(buff->getTokenType() == WHILE) {
+            num = whileStatement();
+        }
+        else if(buff->getTokenType() == READ) {
+            num = readStatement();
+        }
+        else if(buff->getTokenType() == WRITE) {
+            num = writeStatement();
+        }
+        else if(buff->getTokenType() == NEWLINE) {
+            num = newlineStatement();
+        }
+        else {
+            reportSYNTAX_ERROR(scanner, "statement expected");
+            exit(EXIT_FAILURE);
+        }
+        exitingDEBUG("statement");
         return 0;
 	}
 	
 	int TCparser::expressionStatement(){
-
+        enteringDEBUG("expressionStatement");
+        num = expression();
+        accept(SEMICOLON);
+        exitingDEBUG("expressionStatement");
         return 0;
 	}
 	
 	int TCparser::breakStatement(){
-
+        enteringDEBUG("breakStatement");
+        accept(BREAK);
+        accept(SEMICOLON);
+        exitingDEBUG("breakStatement");
         return 0;
 	}
 	
@@ -159,11 +217,14 @@ namespace toycalc{
 	}
 	
 	int TCparser::nullStatement(){
+        enteringDEBUG("nullStatement");
         accept(SEMICOLON);
+        exitingDEBUG("nullStatement");
         return 0;
 	}
 	
 	int TCparser::returnStatement(){
+        enteringDEBUG("returnStatement");
         accept(RETURN);
         if(buff->getTokenType() != SEMICOLON) {
             num = expression();
@@ -172,20 +233,23 @@ namespace toycalc{
         else {
             accept(SEMICOLON);
         }
+        exitingDEBUG("returnStatement");
         return 0;
 	}
 	
 	int TCparser::whileStatement(){
+        enteringDEBUG("whileStatement");
         accept(WHILE);
         accept(LPAREN);
         num = expression();
         accept(RPAREN);
         num = statement();
-
+        exitingDEBUG("whileStatement");
         return 0;
 	}
 	
 	int TCparser::readStatement(){
+        enteringDEBUG("readStatement");
         accept(READ);
         accept(LPAREN);
         accept(ID);
@@ -195,25 +259,31 @@ namespace toycalc{
         }
         accept(RPAREN);
         accept(SEMICOLON);
+        exitingDEBUG("readStatement");
         return 0;
 	}
 	
 	int TCparser::writeStatement(){
+        enteringDEBUG("writeStatement");
         accept(WRITE);
         accept(LPAREN);
         num = actualParameters();
         accept(RPAREN);
         accept(SEMICOLON);
+        exitingDEBUG("writeStatement");
         return 0;
 	}
 	
 	int TCparser::newLineStatement(){
+        enteringDEBUG("newlineStatement");
         accept(NEWLINE);
         accept(SEMICOLON);
+        exitDEBUG("newlineStatement");
         return 0;
 	}
 	
 	int TCparser::expression(){
+        enteringDEBUG("expression");
         num = relopExpression();
         if(buff->getTokenType() == ASSIGNOP){
             buff = scanner->getToken();
@@ -221,10 +291,12 @@ namespace toycalc{
             //accept(buff);
         }
         num = relopExpression();
+        exitingDEBUG("expression");
         return 0;
 	}
 	
 	int TCparser::relopExpression(){
+        enteringDEBUG("relopExpression");
         num = simpleExpression();
         if(buff->getTokenType() == RELOP){
             buff = scanner->getToken();
@@ -232,10 +304,12 @@ namespace toycalc{
             //accept(buff);
         }
         num = simpleExpression();
+        exitingDEBUG("relopExpression");
         return 0;
 	}
 	
 	int TCparser::simpleExpression(){
+        enteringDEBUG("simpleExpression");
         num = term();
         if(buff->getTokenType() == ADDOP){
             buff = scanner->getToken();
@@ -243,10 +317,12 @@ namespace toycalc{
             //accept(buff);
         }
         num = term();
+        exitingDEBUG("simpleExpression");
         return 0;
 	}
 	
 	int TCparser::term(){
+        enteringDEBUG("term");
         num = primary();
         if(buff->getTokenType() == MULOP){
             buff = scanner->getToken();
@@ -254,15 +330,46 @@ namespace toycalc{
             //accept(buff);
         }
         num = primary();
+        exitingDEBUG("term");
         return 0;
 	}
 	
 	int TCparser::primary(){
-
+        enteringDEBUG("primary");
+        if(buff->getTokenType() == ID) {
+            buff = scanner->getToken();
+            if(buff->getTokenType() == LPAREN) {
+                num = funcitonCall();
+            }
+        }
+        else if(buff->getTokenType() == NUMBER) {
+            buff = scanner->getToken();
+        }
+        else if(buff->getTokenType() == STRING) {
+            buff = scanner->getToken();
+        }
+        else if(buff->getTokenType() == CHARLITERAL) {
+            buff = scanner->getToken();
+        }
+        else if(buff->getTokenType() == LPAREN) {
+            accept(LPAREN);
+            num = expression();
+            accept(RPAREN);
+        }
+        else if(buff->getTokenType() == ADDOP || buff->getTokenType() == NOT) {
+            buff = scanner->getToken();
+            num = primary();
+        }
+        else {
+            reportSYNTAX_ERROR(scanner, "primary expected");
+            exit(EXIT_FAILURE);
+        }
+        exitingDEBUG("primary");
         return 0;
 	}
 	
 	int TCparser::functionCall(){
+	    enteringDEBUG("functionCall");
         accept(LPAREN);
         if(buff->getTokenType() != RPAREN) {
             num = actualParameters();
@@ -271,15 +378,18 @@ namespace toycalc{
         else {
             accept(RPAREN);
         }
+        exitingDEBUG("functionCall");
         return 0;
 	}
 	
 	int TCparser::actualParameters(){
+        enteringDEBUG("actualParameters");
 	    num = expression();
 	    while(buff->getTokenType() == COMMA){
 	        accept(COMMA);
 	        num = expression();
 	    }
+        exitingDEBUG("actualParameters");
         return 0;
 	}
 	
@@ -293,5 +403,4 @@ namespace toycalc{
 			exit(EXIT_FAILURE);
 		}
 	}
-	
 }
