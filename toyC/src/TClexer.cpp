@@ -36,7 +36,7 @@ namespace toycalc {
   }
   
   TCtoken* TClexer::getToken() {
-    lexeme = ""; TCtoken* t;
+      lexeme = ""; TCtoken* t;
 
     while (isspace(charBuff) && (charBuff != EOFCHAR)) charBuff = getChar();
     if (charBuff == EOFCHAR) {
@@ -289,17 +289,40 @@ namespace toycalc {
   std::string TClexer::getLexeme() { return lexeme; }
   int TClexer::getPos() { return pos; }
   int TClexer::getLineNum() { return lineNum; }
-  
+
+    /*char getChar() {
+        do {
+            if (infile.eof()) return EOFCHAR;
+            if (line.empty() || pos > line.length()) line = getNextLine();
+            char ch = line[pos];
+            if ( ((ch == '/') && (line[pos+1] == '/')) || (ch == '\0') ) {
+                line = getNextLine();
+                ch = line[pos];
+            }
+            if (isInAlphabet(ch) || isspace(ch)) break;
+
+            reportWARNING("","illegal character ignored 2");
+            //      reportWARNING("","illegal character '"+line[pos]+"' ignored")
+            pos++;
+
+        } while (true);
+        return line[pos++];
+    }*/
+
   char getChar() {
     do {
       if (infile.eof()) return EOFCHAR;
       if (line.empty() || pos > line.length()) line = getNextLine();
       char ch = line[pos];
+      if ((line[0] == '/') && (line[1] == '/')) {
+          line = getNextLine();
+          ch = line[pos];
+      }
       if ( ((ch == '/') && (line[pos+1] == '/')) || (ch == '\0') ) {
         line = getNextLine();
         ch = line[pos];
       }
-	  if((ch == '/') && (line[pos+1] == '*')) {									/*this case added my Matthew and Jeremy*/
+	  if((ch == '/') && (line[pos+1] == '*')) {									//this case added my Matthew and Jeremy
 		  pos++;
 		  while(!((ch == '*') && (line[pos+1] == '/'))) {
 			 // printf("ch: %c, line[pos+1]: %c\n", ch, line[pos+1]);
