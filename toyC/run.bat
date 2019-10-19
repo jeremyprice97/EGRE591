@@ -1,5 +1,5 @@
 make clean
 make
 cd bin
-tc -v ../test/p1tokens.tc
+tc -v ../test/test.tc
 cd ..

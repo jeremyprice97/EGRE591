@@ -46,7 +46,7 @@ class TCparser {
     int whileStatement();
     int readStatement();
     int writeStatement();
-    int newLineStatement();
+    int newlineStatement();
     int expression();
     int relopExpression();
     int simpleExpression();

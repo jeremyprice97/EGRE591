@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
         TCparser *parser = new TCparser(scanner);   //parser
         int tok;
         //    turnVerboseOn();
+		
         tok = parser->parse();                      //parser
         //while ((tok=scanner->getToken()->getTokenType()) != EOFILE) ;     //scanner
     } catch(...) {

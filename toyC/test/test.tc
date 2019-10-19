@@ -1,0 +1,27 @@
+int main() {
+	int i;
+	char c;
+	c = 's';
+	i = 10;
+	i = i + 1;
+	i = i < 10;
+	i = (i == 10);
+	
+	newline;
+	break;
+	
+	while (i > 0) {
+		i =1;
+	}
+	
+	if (i != 0) {
+		write(i);
+	}
+	else if (i <= 1) {
+		read(i);
+	}
+	
+	return 0;
+}
+
+

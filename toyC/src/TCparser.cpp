@@ -274,23 +274,24 @@ namespace toycalc{
         return 0;
 	}
 	
-	int TCparser::newLineStatement(){
+	int TCparser::newlineStatement(){
         enteringDEBUG("newlineStatement");
         accept(NEWLINE);
         accept(SEMICOLON);
-        exitDEBUG("newlineStatement");
+        exitingDEBUG("newlineStatement");
         return 0;
 	}
 	
 	int TCparser::expression(){
         enteringDEBUG("expression");
         num = relopExpression();
-        if(buff->getTokenType() == ASSIGNOP){
+        while(buff->getTokenType() == ASSIGNOP){
             buff = scanner->getToken();
+			num = relopExpression();
             //what to do with the assign operator
             //accept(buff);
         }
-        num = relopExpression();
+        
         exitingDEBUG("expression");
         return 0;
 	}
@@ -298,12 +299,13 @@ namespace toycalc{
 	int TCparser::relopExpression(){
         enteringDEBUG("relopExpression");
         num = simpleExpression();
-        if(buff->getTokenType() == RELOP){
+        while(buff->getTokenType() == RELOP){
             buff = scanner->getToken();
+			num = simpleExpression();
             //what to do with the assign operator
             //accept(buff);
         }
-        num = simpleExpression();
+        
         exitingDEBUG("relopExpression");
         return 0;
 	}
@@ -311,12 +313,13 @@ namespace toycalc{
 	int TCparser::simpleExpression(){
         enteringDEBUG("simpleExpression");
         num = term();
-        if(buff->getTokenType() == ADDOP){
+        while(buff->getTokenType() == ADDOP){
             buff = scanner->getToken();
+			num = term();
             //what to do with the assign operator
             //accept(buff);
         }
-        num = term();
+       
         exitingDEBUG("simpleExpression");
         return 0;
 	}
@@ -324,12 +327,13 @@ namespace toycalc{
 	int TCparser::term(){
         enteringDEBUG("term");
         num = primary();
-        if(buff->getTokenType() == MULOP){
+        while(buff->getTokenType() == MULOP){
             buff = scanner->getToken();
+			num = primary();
             //what to do with the assign operator
             //accept(buff);
         }
-        num = primary();
+        
         exitingDEBUG("term");
         return 0;
 	}
@@ -339,7 +343,7 @@ namespace toycalc{
         if(buff->getTokenType() == ID) {
             buff = scanner->getToken();
             if(buff->getTokenType() == LPAREN) {
-                num = funcitonCall();
+                num = functionCall();
             }
         }
         else if(buff->getTokenType() == NUMBER) {
