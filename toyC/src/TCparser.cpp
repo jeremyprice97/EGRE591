@@ -110,6 +110,7 @@ namespace toycalc{
             exit(EXIT_FAILURE);
         }
         while (buff->getTokenType() == COMMA){
+			buff = scanner->getToken();
             num = type();
             if(buff->getTokenType() == ID) {
                 buff = scanner->getToken();
