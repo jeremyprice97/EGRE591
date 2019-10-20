@@ -1,3 +1,3 @@
 cd bin
-tc -v ../test/p1tokens.tc
+tc -v ../test/other.tc
 cd ..

@@ -1,2 +1,6 @@
+//this is also a comment
 char 'c'
-//this is comment
+int while
+(//this is comment
+/*another comment*/
+}

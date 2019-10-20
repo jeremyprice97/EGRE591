@@ -314,13 +314,13 @@ namespace toycalc {
       if (infile.eof()) return EOFCHAR;
       if (line.empty() || pos > line.length()) line = getNextLine();
       char ch = line[pos];
-      if ((line[0] == '/') && (line[1] == '/')) {
+      if(ch == '\0') {
           line = getNextLine();
           ch = line[pos];
       }
-      if ( ((ch == '/') && (line[pos+1] == '/')) || (ch == '\0') ) {
-        line = getNextLine();
-        ch = line[pos];
+      if ( ((line[0] == '/') && (line[1] == '/')) || ((ch == '/') && (line[pos+1] == '/')) ) {
+          line = getNextLine();
+          ch = line[pos];
       }
 	  if((ch == '/') && (line[pos+1] == '*')) {									//this case added my Matthew and Jeremy
 		  pos++;
