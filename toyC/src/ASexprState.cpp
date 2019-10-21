@@ -5,9 +5,9 @@
 namespace toycalc {
 
     ASexprState::ASexprState(ASexpression* e) {
-        expression = e; setType(exprSstate);
+        expression = e; setType(exprState);
     }
-    ASexpression *ASexpressionState::getExpression() { return expression; }
+    ASexpression *ASexprState::getExpression() { return expression; }
 
     std::string ASexprState::toString() {
         return "exprState("+expression->toString()+")";

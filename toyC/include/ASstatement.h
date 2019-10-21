@@ -2,9 +2,6 @@
 #define ASPROGRAM_H
 
 #include "ASabstractSyntax.h"
-//#include "ASstatement.h"
-
-//#define MAX_STATEMENTS 500 // arbitrary
 
 namespace toycalc {
 
@@ -17,18 +14,10 @@ namespace toycalc {
         enum stateType getType();
         void setType(enum stateType);
         std::string toTypeString(enum stateType);
-      //ASprogram(std::string,ASstatement*[],int);
-      //std::string toString();
-
-      //std::string getName();
-      //ASstatement *getStatement(int);
-      //int getNumStatements();
 
      private:
         enum stateType type;
-      //ASstatement *statementList[MAX_STATEMENTS];
-      //std::string name;
-      //int numStatements;
+
     };
  
 }

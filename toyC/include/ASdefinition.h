@@ -1,27 +1,34 @@
-#ifndef ASPROGRAM_H
-#define ASPROGRAM_H
+#ifndef ASDEFINITION_H
+#define ASDEFINITION_H
 
 #include "ASabstractSyntax.h"
-#include "ASstatement.h"
-
-#define MAX_STATEMENTS 500 // arbitrary
+//#include "ASprogram.h"
 
 namespace toycalc {
-  
-class ASprogram:public ASabstractSyntax {
- public:
-  ASprogram(std::string,ASstatement*[],int);
-  std::string toString();
 
-  std::string getName();
-  ASstatement *getStatement(int);
-  int getNumStatements();
+    class ASdefinition:public ASabstractSyntax {
+    public:
+        virtual std::string toString() = 0;
+    };
 
- private:
-  ASstatement *statementList[MAX_STATEMENTS];
-  std::string name;
-  int numStatements;
-};
- 
 }
+/*
+namespace toycalc {
+
+    enum defType {funcDef, varDef};
+
+    class ASdefinition:public ASabstractSyntax {
+
+    public:
+        virtual std::string toString() = 0;
+        enum defType getType();
+        void setType(enum defType);
+        std::string toTypeString(enum defType);
+
+    private:
+        enum defType type;
+    };
+
+}
+*/
 #endif

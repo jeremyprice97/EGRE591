@@ -13,7 +13,7 @@ namespace toycalc {
 
   static char charBuff;
   static std::string line;
-  static int pos;
+  static unsigned int pos;
   static int lineNum = 0;
   static std::string lexeme = ""; 
   static char EOFCHAR = '\0'; // arbitrary non-printing char

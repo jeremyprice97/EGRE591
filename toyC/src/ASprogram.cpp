@@ -6,26 +6,26 @@
 
 namespace toycalc{
 
-  ASprogram::ASprogram(std::string n, ASstatement* statements[], int num) {
-    for (int i=0; i < num; i++) statementList[i] = statements[i];
-    name = n; numStatements = num;
+  ASprogram::ASprogram(std::string n, ASdefinition* defs[], int num) {
+    for (int i=0; i < num; i++) definitionList[i] = defs[i];
+    name = n; numDefinitions = num;
   }
 
   std::string ASprogram::getName() { return name; }
-  ASstatement* ASprogram::getStatement(int n) { return statementList[n]; }
-  int ASprogram::getNumStatements() { return numStatements; }
+  ASdefinition* ASprogram::getDefinition(int n) { return definitionList[n]; }
+  int ASprogram::getNumDefinitions() { return numDefinitions; }
   
   std::string ASprogram::toString() {
-    if (numStatements==0) return "prog([])";
+    if (numDefinitions==0) return "prog([])";
     std::string s = "prog(\n";
     indent();
     s += spaces() + name + ",\n";
     s += spaces() + "[\n";
     indent();
-    if (numStatements > 0) {
-      s += (spaces()+statementList[0]->toString());
-      for (int i=1; i < numStatements; i++)          
-        s += ",\n"+spaces()+statementList[i]->toString();
+    if (numDefinitions > 0) {
+      s += (spaces()+definitionList[0]->toString());
+      for (int i=1; i < numDefinitions; i++)
+        s += ",\n"+spaces()+definitionList[i]->toString();
     }
     outdent();
     s += "\n"+spaces() + "]\n";

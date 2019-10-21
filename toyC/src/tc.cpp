@@ -6,6 +6,8 @@
 #include "TCtokens.h"
 #include "TCparser.h"
 
+#include "AbstractSyntax.h"
+
 /*Provided by Dr. Resler*/
 
 using namespace toycalc;
