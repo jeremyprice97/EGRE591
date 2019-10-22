@@ -16,6 +16,7 @@
 #include "ASnewLineState.h"
 #include "ASnot.h"
 #include "ASnullState.h"
+#include "ASoperator.h"
 #include "ASreadState.h"
 #include "ASreturnState.h"
 #include "ASsimpleExpr.h"

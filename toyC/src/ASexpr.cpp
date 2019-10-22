@@ -8,7 +8,7 @@ namespace toycalc {
     }
 
     std::string ASexpr::toString() {
-        return ("expr("+oper->toString()+","+
+        return ("expr("+oper->getLexeme()+","+
                 op1->toString()+","+
                 op2->toString()+")");
 
