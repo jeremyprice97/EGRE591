@@ -20,12 +20,14 @@ int main(int argc, char *argv[]) {
     try {
         processCommandLine(argc,argv);
         TClexer *scanner = new TClexer(inputFileName);  //scanner
-        //TCparser *parser = new TCparser(scanner);   //parser
-        int tok;
+        TCparser *parser = new TCparser(scanner);   //parser
+        //int tok;
+		ASabstractSyntax* p = NULL;
         //    turnVerboseOn();
 		
-        //tok = parser->parse();                      //parser
-        while ((tok=scanner->getToken()->getTokenType()) != EOFILE) ;     //scanner
+        p = parser->parse();                      //parser
+		cout << p->toString();
+       // while ((tok=scanner->getToken()->getTokenType()) != EOFILE) ;     //scanner
     } catch(...) {
         std::cerr << "ERROR: scanning failed" << std::endl;
         exit(EXIT_FAILURE);
