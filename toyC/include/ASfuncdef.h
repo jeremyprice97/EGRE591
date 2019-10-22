@@ -12,19 +12,19 @@ namespace toycalc {
 
     class ASfuncDef:public ASdefinition {
     public:
-        ASfuncDef(int, TCtoken*, ASvarDef*[], ASstatement*, int);
+        ASfuncDef(int, TCtoken*, ASdefinition*[], ASstatement*, int);
         std::string toString();
 
         int getID();
         TCtoken *getToken();
-        ASvarDef *getVarDefs(int);
+        ASdefinition *getVarDefs(int);
         ASstatement *getStatement();
         int getNumVarDefs();
 
     private:
         int ID;
         TCtoken *type;
-        ASvarDef *varDefsList[MAX_STATEMENTS];
+        ASdefinition *varDefsList[MAX_STATEMENTS];
         ASstatement *statement;
         int numVarDefs;
     };

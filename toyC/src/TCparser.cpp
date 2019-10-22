@@ -9,19 +9,89 @@
 #include "TCsymbol.h"
 #include "TCsymTable.h"
 
-int num;
+//#include "AbstractSyntax.h"
 
-//return 0 valid, return -1 syntax error
+/*
+concrete grammar:
 
+ToyCProgram -> {Definition} EOF
+Definition -> Type identifier ( functionDefinition | ; )
+Type -> int | char
+functionDefinition -> functionHeader functionBody
+functionHeader -> ( [formalParamList])
+functionBody -> compoundStatement
+formalParamList -> Type identifier { , Type identifier }
+Statement -> expressionStatement
+			 | breakStatement
+			 | compoundStatement
+			 | ifStatement
+			 | NullStatement
+			 | ReturnStatement
+			 | WhileStatement
+			 | ReadStatement
+			 | WriteStatement
+			 | NewLineStatement		 
+ExpressionStatement → Expression ;
+BreakStatement → break ;
+CompoundStatement → { { Type identifier ; } { Statement } }
+IfStatement → if ( Expression ) Statement [ else Statement ]
+NullStatement → ;
+ReturnStatement → return [ Expression ] ;
+WhileStatement → while ( Expression ) Statement
+ReadStatement → read ( identifier { , identifier } ) ;
+WriteStatement → write ( ActualParameters ) ;
+NewLineStatement → newline ;
+Expression → RelopExpression { assignop RelopExpression }
+RelopExpression → SimpleExpression { relop SimpleExpression }
+SimpleExpression → Term { addop Term }
+Term → Primary { mulop Primary }
+Primary → identifier [ FunctionCall ]
+		  | number
+		  | stringConstant
+		  | charConstant
+		  | ( Expression )
+		  | ( − | not ) Primary
+FunctionCall → ( [ ActualParameters ] )
+ActualParameters → Expression { , Expression }			 
+
+Abstract Syntax
+Program -> prog(Definition*)
+Definition -> funcDef(Id, Type, varDef(Id+, Type)*, Statement) | varDef(Id+, Type)
+Statement -> exprState(Expression)
+			| breakState()
+			| blockState(varDef(Id+, Type)*, Statement*)
+			| ifState(Expression, Statement, Statement?)
+			| nullState()
+			| returnState(Expression?)
+			| whileState(Expression, Statement)
+			| readState(Id+)
+			| writeState(Expression+)
+			| newLineState()
+Expression -> Number | Identifier | CharLiteral | StringLiteral
+			  | funcCall(Identifier, Expression*)
+			  | expr(Operator, Expression, Expression)
+			  | minus(Expression)
+			  | not(Expression)
+Operator -> + | − | ∗ | / | % | || | && | <= | < | = | > | >= | ! =
+		 
+
+
+
+
+TODO:
+*/
 namespace toycalc{
+	
+	//static void checkIfAllLabelTargetsAreDefined(ASprogram*);
+	//static bool targetLabelExists(std::string,ASprogram*);
 	
 	TCparser::TCparser(TClexer* s) { scanner = s; }
 	
-	int TCparser::parse() {
+	ASabstractSyntax* TCparser::parse() {
 		buff = scanner->getToken();
-		//ASabstractSyntax* p = program();
+		ASabstractSyntax* p = toyCProgram();
 		//checkIfAllLabelTargetsAreDefined((ASprogram*)p);
-		return toyCProgram();
+		return p;
 	}
 	
 	void enteringDEBUG(std::string s) {
@@ -32,172 +102,249 @@ namespace toycalc{
 		if (verbose) reportDEBUG("    ","parser","exiting "+s);
 	}
 	
-	int TCparser::toyCProgram(){
+	ASabstractSyntax* TCparser::toyCProgram(){
+		int num = 0;
 	    //toyCProgram -> {Definition} EOF
         enteringDEBUG("toyCProgram");
+		ASdefinition *defList[MAX_DEFINITIONS];
+		symTable = new TCsymTable();
         while(buff->getTokenType() != EOFILE){
-            num = definition();
+            defList[num] = definition();
+			num++;
         }
         exitingDEBUG("toyCProgram");
-	    return 0;
+	    return new ASprogram(inputFileName, defList, num-1);
 	}
 	
-	int TCparser::definition(){
+	ASdefinition* TCparser::definition(){
+		ASdefinition* d = NULL;
+		int loc; TCsymbol *sym; 
         enteringDEBUG("definition");
-        num = type();
+        TCtoken* t = type();
         if(buff->getTokenType() == ID) {
+			sym = symTable->getSym(buff);
+			loc = symTable->find(buff->getLexeme());
+			if(loc == -1) loc = symTable->add(new TCsymbol(buff->getLexeme(), NO_TYPE));
+			enum symType stype = symTable->getSym(loc)->getType();
             buff = scanner->getToken();
             if (buff->getTokenType() != SEMICOLON) {
-                num = functionDefinition();
+				if(stype == NO_TYPE) {
+					symTable->getSym(loc)->setType(FUNC);
+				} else if (stype == VAR) {
+					reportSEMANTIC_ERROR(scanner, "function name expected");
+				}
+				
+                d = functionDefinition(loc, t);
             } else {
+				if(stype == NO_TYPE) {
+					symTable->getSym(loc)->setType(VAR);
+				}	
+				else if (stype == FUNC) {
+					reportSEMANTIC_ERROR(scanner, "variable name expected");
+				}
                 accept(SEMICOLON);
+				d = new ASvarDef(loc, t);
             }
         } else {
             reportSYNTAX_ERROR(scanner, "identifier expected");
             exit(EXIT_FAILURE);
         }
         exitingDEBUG("definition");
-        return 0;
+        return d;
 	}
 	
-	int TCparser::type(){
+	TCtoken* TCparser::type(){
+		TCtoken* t = NULL;
         enteringDEBUG("type");
         if((buff->getTokenType() == INT) || (buff->getTokenType() == CHAR)){
+			t = buff;
             buff = scanner->getToken();
         } else {
             reportSYNTAX_ERROR(scanner, "type expected");
             exit(EXIT_FAILURE);
         }
         exitingDEBUG("type");
-        return 0;
+        return t;
 	}
 	
-	int TCparser::functionDefinition(){
+	ASdefinition* TCparser::functionDefinition(int loc, TCtoken* type){
+		ASdefinition* argList[MAX_ARGS]; ASstatement* s = NULL; int n;
+		ASdefinition* f = NULL;
 	    enteringDEBUG("functionDefinition");
-	    num = functionHeader();
-	    num = functionBody();
+	    n = functionHeader(argList);
+	    s = functionBody();
+		f = new ASfuncDef(loc, type, argList, s, n);
         exitingDEBUG("functionDefinition");
-        return 0;
+        return f;
 	}
 	
-	int TCparser::functionHeader(){
-        enteringDEBUG("functionHeader");
+	int TCparser::functionHeader(ASdefinition* argList[]){
+        int num;
+		enteringDEBUG("functionHeader");
         accept(LPAREN);
         if (buff->getTokenType() != RPAREN) {
-            num = formalParamList();
+            num = formalParamList(argList);
             accept(RPAREN);
         } else {
             accept(RPAREN);
         }
         exitingDEBUG("functionHeader");
-        return 0;
+        return num;
 	}
 	
-	int TCparser::functionBody(){
+	ASstatement* TCparser::functionBody(){
+		ASstatement* s = NULL;
         enteringDEBUG("functionBody");
-        num = compoundStatement();
+        s = compoundStatement();
         exitingDEBUG("functionBody");
-        return 0;
+        return s;
 	}
 	
-	int TCparser::formalParamList(){
+	int TCparser::formalParamList(ASdefinition* argList[]){
+		int loc; TCsymbol *sym; int num = 1;
 	    enteringDEBUG("formalParamList");
-	    num = type();
+	    TCtoken* t = type();
         if(buff->getTokenType() == ID) {
+			sym = symTable->getSym(buff);
+			loc = symTable->find(buff->getLexeme());
+			if(loc == -1) loc = symTable->add(new TCsymbol(buff->getLexeme(), NO_TYPE));
+			enum symType stype = symTable->getSym(loc)->getType();
+			if(stype == NO_TYPE) {
+				symTable->getSym(loc)->setType(VAR);
+			} else if (stype == FUNC) {
+				reportSEMANTIC_ERROR(scanner, "var name expected");
+			}
             buff = scanner->getToken();
         } else {
             reportSYNTAX_ERROR(scanner, "identifier expected");
             exit(EXIT_FAILURE);
         }
+		argList[0] = new ASvarDef(loc, t);
         while (buff->getTokenType() == COMMA){
 			buff = scanner->getToken();
-            num = type();
+            t = type();
             if(buff->getTokenType() == ID) {
-                buff = scanner->getToken();
+				sym = symTable->getSym(buff);
+				loc = symTable->find(buff->getLexeme());
+				if(loc == -1) loc = symTable->add(new TCsymbol(buff->getLexeme(), NO_TYPE));
+				enum symType stype = symTable->getSym(loc)->getType();
+				if(stype == NO_TYPE) {
+					symTable->getSym(loc)->setType(VAR);
+				} else if (stype == FUNC) {
+					reportSEMANTIC_ERROR(scanner, "var name expected");
+				}
+				buff = scanner->getToken();
             } else {
                 reportSYNTAX_ERROR(scanner, "identifier expected");
                 exit(EXIT_FAILURE);
             }
+			argList[num] = new ASvarDef(loc, t);
+			num++;
         }
         exitingDEBUG("formalParamList");
-        return 0;
+        return num;
 	}
 	
-	int TCparser::statement(){
+	ASstatement* TCparser::statement(){
+		ASstatement* s = NULL;
         enteringDEBUG("statement");
         if(buff->getTokenType() == ID || buff->getTokenType() == NUMBER || buff->getTokenType() == STRING || buff->getTokenType() == CHARLITERAL || buff->getTokenType() == LPAREN || buff->getTokenType() == ADDOP || buff->getTokenType() == NOT){
-            num = expressionStatement();
+            s = expressionStatement();
         }
         else if(buff->getTokenType() == BREAK) {
-            num = breakStatement();
+            s = breakStatement();
         }
         else if(buff->getTokenType() == LCURLY) {
-            num = compoundStatement();
+            s = compoundStatement();
         }
         else if(buff->getTokenType() == IF) {
-            num = ifStatement();
+            s = ifStatement();
         }
         else if(buff->getTokenType() == SEMICOLON) {
-            num = nullStatement();
+            s = nullStatement();
         }
         else if(buff->getTokenType() == RETURN) {
-            num = returnStatement();
+            s = returnStatement();
         }
         else if(buff->getTokenType() == WHILE) {
-            num = whileStatement();
+            s = whileStatement();
         }
         else if(buff->getTokenType() == READ) {
-            num = readStatement();
+            s = readStatement();
         }
         else if(buff->getTokenType() == WRITE) {
-            num = writeStatement();
+            s = writeStatement();
         }
         else if(buff->getTokenType() == NEWLINE) {
-            num = newlineStatement();
+            s = newlineStatement();
         }
         else {
             reportSYNTAX_ERROR(scanner, "statement expected");
             exit(EXIT_FAILURE);
         }
         exitingDEBUG("statement");
-        return 0;
+        return s;
 	}
 	
-	int TCparser::expressionStatement(){
+	ASstatement* TCparser::expressionStatement(){
+		ASstatement* s = NULL;
         enteringDEBUG("expressionStatement");
-        num = expression();
+        s = new ASexprState(expression());
         accept(SEMICOLON);
         exitingDEBUG("expressionStatement");
-        return 0;
+        return s;
 	}
 	
-	int TCparser::breakStatement(){
+	ASstatement* TCparser::breakStatement(){
         enteringDEBUG("breakStatement");
         accept(BREAK);
         accept(SEMICOLON);
         exitingDEBUG("breakStatement");
-        return 0;
+        return new ASbreakState();
 	}
 	
-	int TCparser::compoundStatement(){
+	ASstatement* TCparser::compoundStatement(){
+		ASstatement* cs = NULL;
+		ASdefinition* lVarDefs[L_VAR_MAX];
+		ASstatement* stateList[MAX_STATES];
+		int numVars = 0;
+		int numStates = 0;
+		int loc;
+		TCsymbol *sym = NULL; 
+		TCtoken* t = NULL;
         enteringDEBUG("compoundStatement");
         accept(LCURLY);
         while((buff->getTokenType() == INT) || (buff->getTokenType() == CHAR)){
-            num = type();
+            t = type();
             if(buff->getTokenType() == ID) {
-                buff = scanner->getToken();
+				sym = symTable->getSym(buff);
+				loc = symTable->find(buff->getLexeme());
+				if(loc == -1) loc = symTable->add(new TCsymbol(buff->getLexeme(), NO_TYPE));
+				enum symType stype = symTable->getSym(loc)->getType();
+				if(stype == NO_TYPE) {
+					symTable->getSym(loc)->setType(VAR);
+				} else if (stype == FUNC) {
+					reportSEMANTIC_ERROR(scanner, "var name expected");
+				}
+				buff = scanner->getToken();
                 accept(SEMICOLON);
             }
+			lVarDefs[numVars] = new ASvarDef(loc, t);
+			numVars++;
         }
         while(buff->getTokenType() != RCURLY) {
-            num = statement();
+            stateList[numStates] = statement();
         }
         accept(RCURLY);
+		cs = new ASblockState(lVarDefs, stateList, numVars, numStates);
         exitingDEBUG("compoundStatement");
-        return 0;
+        return cs;
 	}
 	
-	int TCparser::ifStatement(){
+	ASstatement* TCparser::ifStatement(){
+		ASexpression* cond = NULL;
+		ASstatement* s = NULL;
+		ASstatement* e = NULL;
         enteringDEBUG("ifStatement");
         if(buff->getTokenType() == IF){
             buff = scanner->getToken();
@@ -206,196 +353,268 @@ namespace toycalc{
             exit(EXIT_FAILURE);
         }
         accept(LPAREN);
-        num = expression();
+        cond = expression();
         accept(RPAREN);
-        num = statement();
+        s = statement();
         if(buff->getTokenType() == ELSE){
             buff = scanner->getToken();
-            num = statement();
+            e = statement();
         }
         exitingDEBUG("ifStatement");
-        return 0;
+        return new ASifState(cond, s, e);
 	}
 	
-	int TCparser::nullStatement(){
+	ASstatement* TCparser::nullStatement(){
         enteringDEBUG("nullStatement");
         accept(SEMICOLON);
         exitingDEBUG("nullStatement");
-        return 0;
+        return new ASnullState();
 	}
 	
-	int TCparser::returnStatement(){
+	ASstatement* TCparser::returnStatement(){
+		ASexpression* e = NULL;
         enteringDEBUG("returnStatement");
         accept(RETURN);
         if(buff->getTokenType() != SEMICOLON) {
-            num = expression();
+            e = expression();
             accept(SEMICOLON);
         }
         else {
             accept(SEMICOLON);
         }
         exitingDEBUG("returnStatement");
-        return 0;
+        return new ASreturnState(e);
 	}
 	
-	int TCparser::whileStatement(){
+	ASstatement* TCparser::whileStatement(){
+		ASstatement* s = NULL;
+		ASexpression* e = NULL;
         enteringDEBUG("whileStatement");
         accept(WHILE);
         accept(LPAREN);
-        num = expression();
+        e = expression();
         accept(RPAREN);
-        num = statement();
+        s = statement();
         exitingDEBUG("whileStatement");
-        return 0;
+        return new ASwhileState(e, s);
 	}
 	
-	int TCparser::readStatement(){
+	ASstatement* TCparser::readStatement(){
+		int numID = 0;
+		int loc;
+		int idList[MAX_ID];
+		TCsymbol *sym;
         enteringDEBUG("readStatement");
         accept(READ);
         accept(LPAREN);
-        accept(ID);
+        if(buff->getTokenType() == ID) {
+			sym = symTable->getSym(buff);
+			loc = symTable->find(buff->getLexeme());
+			if ( (sym->getType() == NO_TYPE) || (loc == -1)) {
+				reportSEMANTIC_ERROR(scanner,"uninitialized variable");
+				exit(EXIT_FAILURE);
+			}
+			if ( sym->getType() == FUNC ) {
+				reportSEMANTIC_ERROR(scanner,"'"+sym->getId()+"' is a function");
+				exit(EXIT_FAILURE);
+			}
+			idList[numID] = loc;
+			++numID;
+			buff = scanner->getToken();
+		}
+		
         while (buff->getTokenType() == COMMA) {
             accept(COMMA);
-            accept(ID);
+            if(buff->getTokenType() == ID) {
+					sym = symTable->getSym(buff);
+			loc = symTable->find(buff->getLexeme());
+			if ( (sym->getType() == NO_TYPE) || (loc == -1)) {
+				reportSEMANTIC_ERROR(scanner,"uninitialized variable");
+				exit(EXIT_FAILURE);
+			}
+				idList[numID] = loc;
+				++numID;
+				buff = scanner->getToken();
+			}
         }
         accept(RPAREN);
         accept(SEMICOLON);
         exitingDEBUG("readStatement");
-        return 0;
+        return new ASreadState(idList, numID);
 	}
 	
-	int TCparser::writeStatement(){
+	ASstatement* TCparser::writeStatement(){
+		ASexpression* expressionList[MAX_EXPRESSION];
         enteringDEBUG("writeStatement");
         accept(WRITE);
         accept(LPAREN);
-        num = actualParameters();
+        int num = actualParameters(expressionList);
         accept(RPAREN);
         accept(SEMICOLON);
         exitingDEBUG("writeStatement");
-        return 0;
+        return new ASwriteState(expressionList, num);
 	}
 	
-	int TCparser::newlineStatement(){
+	ASstatement* TCparser::newlineStatement(){
         enteringDEBUG("newlineStatement");
         accept(NEWLINE);
         accept(SEMICOLON);
         exitingDEBUG("newlineStatement");
-        return 0;
+        return new ASnewLineState();
 	}
 	
-	int TCparser::expression(){
+
+	ASexpression* TCparser::expression(){
+		ASexpression* e1 = NULL;
+		ASexpression* e2 = NULL;
+		TCtoken* t = NULL;
         enteringDEBUG("expression");
-        num = relopExpression();
+        e1 = relopExpression();
         while(buff->getTokenType() == ASSIGNOP){
+			t = buff;
             buff = scanner->getToken();
-			num = relopExpression();
-            //what to do with the assign operator
-            //accept(buff);
+			e2 = relopExpression();
+			e1 = new ASexpr(t, e1, e2);
         }
-        
         exitingDEBUG("expression");
-        return 0;
+        return e1;
 	}
 	
-	int TCparser::relopExpression(){
+	ASexpression* TCparser::relopExpression(){
+		ASexpression* e1 = NULL;
+		ASexpression* e2 = NULL;
+		TCtoken* t = NULL;
         enteringDEBUG("relopExpression");
-        num = simpleExpression();
+        e1 = simpleExpression();
         while(buff->getTokenType() == RELOP){
+			t = buff;
             buff = scanner->getToken();
-			num = simpleExpression();
-            //what to do with the assign operator
-            //accept(buff);
+			e2 = simpleExpression();
+            e1 = new ASexpr(t, e1, e2);
         }
         
         exitingDEBUG("relopExpression");
-        return 0;
+        return e1;
 	}
 	
-	int TCparser::simpleExpression(){
+	ASexpression* TCparser::simpleExpression(){
+		ASexpression* e1 = NULL;
+		ASexpression* e2 = NULL;
+		TCtoken* t = NULL;
         enteringDEBUG("simpleExpression");
-        num = term();
+        e1 = term();
         while(buff->getTokenType() == ADDOP){
+			t = buff;
             buff = scanner->getToken();
-			num = term();
-            //what to do with the assign operator
-            //accept(buff);
+			e2 = term();
+            e1 = new ASexpr(t, e1, e2);
         }
        
         exitingDEBUG("simpleExpression");
-        return 0;
+        return e1;
 	}
 	
-	int TCparser::term(){
+	ASexpression* TCparser::term(){
+		ASexpression* e1 = NULL;
+		ASexpression* e2 = NULL;
+		TCtoken* t = NULL;
         enteringDEBUG("term");
-        num = primary();
+        e1 = primary();
         while(buff->getTokenType() == MULOP){
+			t = buff;
             buff = scanner->getToken();
-			num = primary();
-            //what to do with the assign operator
-            //accept(buff);
+			e2 = primary();
+            e1 = new ASexpr(t, e1, e2);
         }
-        
         exitingDEBUG("term");
-        return 0;
+        return e1;
 	}
 	
-	int TCparser::primary(){
+	ASexpression* TCparser::primary(){
+		int loc;
+		int num;
+		TCtoken* t = NULL;
+		TCsymbol* sym = NULL;
+		ASexpression* e = NULL;
+		ASexpression* expressionList[MAX_EXPRESSION];
         enteringDEBUG("primary");
         if(buff->getTokenType() == ID) {
+			sym = symTable->getSym(buff);
+			loc = symTable->find(buff->getLexeme());
+			if ( (sym->getType() == NO_TYPE) || (loc == -1)) {
+				reportSEMANTIC_ERROR(scanner,"uninitialized variable or function");
+				exit(EXIT_FAILURE);
+			}
             buff = scanner->getToken();
             if(buff->getTokenType() == LPAREN) {
-                num = functionCall();
+				num = functionCall(expressionList);
+                e = new ASfuncCall(loc,expressionList, num);
             }
         }
         else if(buff->getTokenType() == NUMBER) {
+			t = buff;
+			e = new ASsimpleExpr(t);
             buff = scanner->getToken();
         }
         else if(buff->getTokenType() == STRING) {
+			t = buff;
+			e = new ASsimpleExpr(t);
             buff = scanner->getToken();
         }
         else if(buff->getTokenType() == CHARLITERAL) {
+			t = buff;
+			e = new ASsimpleExpr(t);
             buff = scanner->getToken();
         }
         else if(buff->getTokenType() == LPAREN) {
             accept(LPAREN);
-            num = expression();
+            e = expression();
             accept(RPAREN);
         }
-        else if(buff->getTokenType() == ADDOP || buff->getTokenType() == NOT) {
+        else if(buff->getTokenType() == ADDOP) {
+			t = buff;
+			buff = scanner->getToken();
+            e = new ASminus(primary());
+		}			
+		else if (buff->getTokenType() == NOT) {
+			t = buff;
             buff = scanner->getToken();
-            num = primary();
+            e = new ASnot(primary());
         }
         else {
             reportSYNTAX_ERROR(scanner, "primary expected");
             exit(EXIT_FAILURE);
         }
         exitingDEBUG("primary");
-        return 0;
+        return e;
 	}
 	
-	int TCparser::functionCall(){
+	int TCparser::functionCall(ASexpression* expressionStatement[]){
+		int num;
 	    enteringDEBUG("functionCall");
         accept(LPAREN);
         if(buff->getTokenType() != RPAREN) {
-            num = actualParameters();
+            num = actualParameters(expressionStatement);
             accept(RPAREN);
         }
         else {
             accept(RPAREN);
         }
         exitingDEBUG("functionCall");
-        return 0;
+        return num;
 	}
 	
-	int TCparser::actualParameters(){
+	int TCparser::actualParameters(ASexpression* expressionStatement[]){
+		int num = 0;
         enteringDEBUG("actualParameters");
-	    num = expression();
+	    expressionStatement[num] = expression();
 	    while(buff->getTokenType() == COMMA){
 	        accept(COMMA);
-	        num = expression();
+	        expressionStatement[num] = expression();
+			++num;
 	    }
         exitingDEBUG("actualParameters");
-        return 0;
+        return num;
 	}
 	
 	void TCparser::accept(int t) {

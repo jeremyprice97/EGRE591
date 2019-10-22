@@ -1,7 +1,7 @@
 #ifndef ASBLOCKSTATE_H
 #define ASBLOCKSTATE_H
 
-#include "ASabstractSyntax.h"
+//#include "ASabstractSyntax.h"
 #include "ASstatement.h"
 #include "ASvarDef.h"
 
@@ -9,18 +9,18 @@
 
 namespace toycalc {
 
-    class ASblockState:public ASabstractSyntax {
+    class ASblockState:public ASstatement {
     public:
-        ASblockState(ASvarDef*[],ASstatement*[],int,int);
+        ASblockState(ASdefinition*[],ASstatement*[],int,int);
         std::string toString();
 
-        ASvarDef *getVarDefs(int);
+        ASdefinition *getVarDefs(int);
         ASstatement *getStatements(int);
         int getNumVarDefs();
         int getNumStatements();
 
     private:
-        ASvarDef *varDefList[MAX];
+        ASdefinition *varDefList[MAX];
         ASstatement *statementList[MAX];
         int numVarDefs;
         int numStatements;

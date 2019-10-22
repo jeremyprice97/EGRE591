@@ -1,5 +1,5 @@
-#ifndef ASPROGRAM_H
-#define ASPROGRAM_H
+#ifndef ASSTATEMENT_H
+#define ASSTATEMENT_H
 
 #include "ASabstractSyntax.h"
 

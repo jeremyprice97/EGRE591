@@ -2,6 +2,7 @@
 #define ABSTRACTSYNTAX_H
 
 #include "ASabstractSyntax.h"
+#include "ASprogram.h"
 #include "ASblockState.h"
 #include "ASbreakState.h"
 #include "ASdefinition.h"
@@ -15,7 +16,6 @@
 #include "ASnewLineState.h"
 #include "ASnot.h"
 #include "ASnullState.h"
-#include "ASprogram.h"
 #include "ASreadState.h"
 #include "ASreturnState.h"
 #include "ASsimpleExpr.h"

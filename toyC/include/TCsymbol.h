@@ -6,7 +6,7 @@
 
 namespace toycalc {
 
-  enum symType { VAR, LABEL, OFFSET, NO_TYPE };
+  enum symType { VAR, FUNC, OFFSET, NO_TYPE };
     
   class TCsymbol {
   public:

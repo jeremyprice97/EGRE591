@@ -50,7 +50,7 @@ namespace toycalc {
       str += "  (";
       str += ( symTable[i]->getId() + "," );
       str += ( symTable[i]->getType()==VAR?"VAR":
-               symTable[i]->getType()==LABEL?"LABEL":
+               symTable[i]->getType()==FUNC?"FUNC":
                symTable[i]->getType()==NO_TYPE?"NO_TYPE":"ERROR" );               
       str += ")\n";
     }

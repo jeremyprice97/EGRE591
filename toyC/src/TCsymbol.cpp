@@ -18,8 +18,7 @@ namespace toycalc {
     str += (getId()+",");
     switch(getType()) {
     case VAR:     str += "VAR";     break;
-    case LABEL:   str += "LABEL";   break;
-    case OFFSET:  str += "OFFSET";  break;
+    case FUNC:   str += "FUNC";   break;
     case NO_TYPE: str += "NO_TYPE"; break;
     default:      str += "ERROR";   break;
     }

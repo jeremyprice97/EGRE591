@@ -1,14 +1,14 @@
 #ifndef ASFUNCCALL_H
 #define ASFUNCCALL_H
 
-#include "ASabstractSyntax.h"
+//#include "ASabstractSyntax.h"
 #include "ASexpression.h"
 
 #define MAX_STATEMENTS 500 // arbitrary
 
 namespace toycalc {
 
-    class ASfuncCall:public ASabstractSyntax {
+    class ASfuncCall:public ASexpression {
     public:
         ASfuncCall(int,ASexpression*[],int);
         std::string toString();
