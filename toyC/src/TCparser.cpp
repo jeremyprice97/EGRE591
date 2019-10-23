@@ -113,7 +113,7 @@ namespace toycalc{
 			num++;
         }
         exitingDEBUG("toyCProgram");
-	    return new ASprogram(inputFileName, defList, num-1);
+	    return new ASprogram(inputFileName, defList, num);
 	}
 	
 	ASdefinition* TCparser::definition(){
@@ -334,6 +334,7 @@ namespace toycalc{
         }
         while(buff->getTokenType() != RCURLY) {
             stateList[numStates] = statement();
+			++numStates;
         }
         accept(RCURLY);
 		cs = new ASblockState(lVarDefs, stateList, numVars, numStates);

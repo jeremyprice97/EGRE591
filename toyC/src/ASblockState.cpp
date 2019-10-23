@@ -34,11 +34,17 @@ namespace toycalc {
         indent();       //for statements
         s += spaces() + "[\n";
         indent();
+		std::cout << "NumStatemnts = " << numStatements << "\n";
         if (numStatements > 0) {
+			std::cout << "after if, before first assingment: ASblockState" << "\n";
             s += statementList[0]->toString();
-            for (int i=1; i < numStatements; i++)
+            for (int i=1; i < numStatements; i++) {
+				std::cout << "in loop: ASblockState, i = " << i << "\n";
                 s += ",\n"+spaces()+statementList[i]->toString();
+			}
+				
         }
+		std::cout << "After loop: ASblockState\n";
         outdent();
         s += "\n" + spaces() + "]\n";
 
