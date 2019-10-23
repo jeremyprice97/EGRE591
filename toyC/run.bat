@@ -1,5 +1,5 @@
 make clean
 make
 cd bin
-tc -v ../test/other.tc
+tc -v ../test/comment.tc
 cd ..

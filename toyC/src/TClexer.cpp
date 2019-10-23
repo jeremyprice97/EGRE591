@@ -23,6 +23,7 @@ namespace toycalc {
   std::string getNextLine();
   bool isInAlphabet(char);
   bool equalIgnoreCase(std::string, std::string);
+  int blockCommentCount = 0;
     
   TClexer::TClexer(std::string fname) {
     inputFileName = fname;
@@ -322,17 +323,27 @@ namespace toycalc {
           line = getNextLine();
           ch = line[pos];
       }
-	  if((ch == '/') && (line[pos+1] == '*')) {									//this case added my Matthew and Jeremy
-		  pos++;
-		  while(!((ch == '*') && (line[pos+1] == '/'))) {
-			 // printf("ch: %c, line[pos+1]: %c\n", ch, line[pos+1]);
-			  pos++;
-			  
-			  if (line.empty() || pos > line.length()) line = getNextLine();
-			  ch = line[pos];
-		  }
-		  pos += 2;
-	  }
+      if((ch == '/') && (line[pos+1] == '*')) {									//this case added my Matthew and Jeremy
+          blockCommentCount++;
+          //printf("1: + blockCommentCount %d\n",blockCommentCount);
+          pos++;
+          while(!((ch == '*') && (line[pos+1] == '/')) || blockCommentCount>1) {
+              if((ch == '/') && (line[pos+1] == '*')) {
+                  blockCommentCount++;
+                  //printf("2: + blockCommentCount %d\n",blockCommentCount);
+              }
+              if((ch == '*') && (line[pos+1] == '/')) {
+                  blockCommentCount--;
+                  //printf("3: - blockCommentCount %d\n",blockCommentCount);
+              }
+              pos++;
+              if (line.empty() || pos > line.length()) line = getNextLine();
+              ch = line[pos];
+          }
+          blockCommentCount--;
+          //printf("4: - blockCommentCount %d\n",blockCommentCount);
+          pos += 2;
+      }
       if (isInAlphabet(ch) || isspace(ch)) break;
         
       reportWARNING("","illegal character "+lexeme+" ignored 2");

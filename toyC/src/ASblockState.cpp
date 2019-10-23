@@ -23,8 +23,10 @@ namespace toycalc {
         indent();       //for varDefs
         s += spaces() + "[\n";
         indent();
-        if (numVarDefs > 0) {
-
+        if(numVarDefs > 0) {
+            s += varDefList[0]->toString();
+            for (int i=1; i < numVarDefs; i++)
+                s += ",\n"+spaces()+varDefList[i]->toString();
         }
         outdent();
         s += "\n" + spaces() + "]\n";
@@ -33,7 +35,9 @@ namespace toycalc {
         s += spaces() + "[\n";
         indent();
         if (numStatements > 0) {
-
+            s += statementList[0]->toString();
+            for (int i=1; i < numStatements; i++)
+                s += ",\n"+spaces()+statementList[i]->toString();
         }
         outdent();
         s += "\n" + spaces() + "]\n";

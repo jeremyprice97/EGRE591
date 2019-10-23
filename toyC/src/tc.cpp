@@ -19,15 +19,15 @@ void printUsageMessage();
 int main(int argc, char *argv[]) {
     try {
         processCommandLine(argc,argv);
-        TClexer *scanner = new TClexer(inputFileName);  //scanner
-        TCparser *parser = new TCparser(scanner);   //parser
-        //int tok;
-		ASabstractSyntax* p = NULL;
+        TClexer *scanner = new TClexer(inputFileName);  //scanner and parser
+        TCparser *parser = new TCparser(scanner);   //parser only
+        //int tok;                                    //scanner only
+		ASabstractSyntax* p = NULL;                 //parser only
         //    turnVerboseOn();
 		
-        p = parser->parse();                      //parser
-		cout << p->toString();
-       // while ((tok=scanner->getToken()->getTokenType()) != EOFILE) ;     //scanner
+        p = parser->parse();                      //parser only
+		cout << p->toString();                    //parser only
+        //while ((tok=scanner->getToken()->getTokenType()) != EOFILE) ;     //scanner only
     } catch(...) {
         std::cerr << "ERROR: scanning failed" << std::endl;
         exit(EXIT_FAILURE);
