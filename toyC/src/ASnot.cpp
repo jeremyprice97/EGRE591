@@ -4,7 +4,7 @@
 
 namespace toycalc {
 
-    ASnot::ASnot(ASexpression* e) { expression = e; }
+    ASnot::ASnot(ASexpression* e) { expression = e; setType(NoT);}
 
     ASexpression* ASnot::getExpression() { return expression; }
 

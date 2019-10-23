@@ -1,4 +1,4 @@
-make clean
+#make clean
 make
 cd bin
 ./tc -v ../test/test.tc

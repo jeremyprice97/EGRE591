@@ -4,7 +4,7 @@
 
 namespace toycalc {
 
-    ASminus::ASminus(ASexpression* e) { expression = e; }
+    ASminus::ASminus(ASexpression* e) { expression = e; setType(minus);}
 
     ASexpression* ASminus::getExpression() { return expression; }
 

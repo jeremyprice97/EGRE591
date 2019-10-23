@@ -2,7 +2,7 @@
 
 #include "ASblockState.h"
 #include "TCoutput.h"
-
+#include "ASexpression.h"
 namespace toycalc {
 
     ASblockState::ASblockState(ASdefinition* varDefs[], ASstatement* statements[], int v_num, int s_num) {
@@ -38,6 +38,12 @@ namespace toycalc {
 		std::cout << "NumStatemnts = " << numStatements << "\n";
         if (numStatements > 0) {
 			std::cout << "after if, before first assingment: ASblockState" << "\n";
+			if(statementList[0] != NULL) {
+				std::cout << "isnt null\n";
+				int t = statementList[0]->getType();
+				std::cout << "type is = " << t << "\n";
+			}
+			std::cout << statementList[0]->toString();
             s += statementList[0]->toString();
             for (int i=1; i < numStatements; i++) {
 				std::cout << "in loop: ASblockState, i = " << i << "\n";

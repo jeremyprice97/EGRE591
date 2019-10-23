@@ -7,7 +7,7 @@ namespace toycalc{
 
     ASfuncCall::ASfuncCall(int l, ASexpression* expressions[], int num) {
         for (int i=0; i < num; i++) expressionList[i] = expressions[i];
-        ID = l; numExpressions = num;
+        ID = l; numExpressions = num; setType(funcCall);
     }
 
     int ASfuncCall::getID() { return ID; }
