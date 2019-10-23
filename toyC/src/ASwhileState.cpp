@@ -4,7 +4,7 @@
 
 namespace toycalc {
     ASwhileState::ASwhileState(ASexpression* exp, ASstatement* state){
-        expression = exp;  statement = state;
+        expression = exp;  statement = state; setType(whileState);
     }
 
     std::string ASwhileState::toString() {

@@ -4,7 +4,7 @@
 
 namespace toycalc {
     ASifState::ASifState(ASexpression* exp, ASstatement* state1, ASstatement* state2){
-        expression = exp;  statement1 = state1; statement2 = state2;
+        expression = exp;  statement1 = state1; statement2 = state2; setType(ifState);
     }
 
     std::string ASifState::toString() {

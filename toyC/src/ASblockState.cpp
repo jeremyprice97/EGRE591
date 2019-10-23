@@ -10,6 +10,7 @@ namespace toycalc {
         for (int i = 0; i < s_num; i++) statementList[i] = statements[i];
         numVarDefs = v_num;
         numStatements = s_num;
+        setType(blockState);
     }
 
     ASdefinition* ASblockState::getVarDefs(int n) { return varDefList[n]; }

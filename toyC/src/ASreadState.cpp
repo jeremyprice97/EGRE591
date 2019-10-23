@@ -8,6 +8,7 @@ namespace toycalc {
     ASreadState::ASreadState(int l[], int num) {
         for (int i=0; i < num; i++) ID[i] = l[i];
         numIDs = num;
+        setType(readState);
     }
 
     int ASreadState::getID(int n) { return ID[n]; }

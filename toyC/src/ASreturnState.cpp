@@ -4,7 +4,7 @@
 
 namespace toycalc {
     ASreturnState::ASreturnState(ASexpression* exp){
-        expression = exp;
+        expression = exp; setType(returnState);
     }
 
     std::string ASreturnState::toString() {
