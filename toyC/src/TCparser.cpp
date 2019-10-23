@@ -533,8 +533,9 @@ namespace toycalc{
 	
 	ASexpression* TCparser::primary(){
 		int loc;
-		int num;
+		int num = 0;
 		TCtoken* t = NULL;
+		TCtoken* t1 = NULL;
 		TCsymbol* sym = NULL;
 		ASexpression* e = NULL;
 		ASexpression* expressionList[MAX_EXPRESSION];
@@ -546,11 +547,17 @@ namespace toycalc{
 				//reportSEMANTIC_ERROR(scanner,"uninitialized variable or function");
 				//exit(EXIT_FAILURE);
 			}
+			t = buff;
+			
             buff = scanner->getToken();
-            if(buff->getTokenType() == LPAREN) {
+            if(buff->getTokenType() != LPAREN) {
+				e = new ASsimpleExpr(t);
+				exitingDEBUG("primary");
+				return e;
+            }
 				num = functionCall(expressionList);
                 e = new ASfuncCall(loc,expressionList, num);
-            }
+			
         }
         else if(buff->getTokenType() == NUMBER) {
 			t = buff;
@@ -591,7 +598,7 @@ namespace toycalc{
 	}
 	
 	int TCparser::functionCall(ASexpression* expressionStatement[]){
-		int num;
+		int num = 0;
 	    enteringDEBUG("functionCall");
         accept(LPAREN);
         if(buff->getTokenType() != RPAREN) {
@@ -601,7 +608,8 @@ namespace toycalc{
         else {
             accept(RPAREN);
         }
-        exitingDEBUG("functionCall");
+//std::cout << "parser: " << num << "\n";
+        exitingDEBUG("functionCall");	
         return num;
 	}
 	
@@ -609,7 +617,9 @@ namespace toycalc{
 		int num = 0;
         enteringDEBUG("actualParameters");
 	    expressionStatement[num] = expression();
+		++num;
 	    while(buff->getTokenType() == COMMA){
+			//std::cout << "why is this being called\n";
 	        accept(COMMA);
 	        expressionStatement[num] = expression();
 			++num;

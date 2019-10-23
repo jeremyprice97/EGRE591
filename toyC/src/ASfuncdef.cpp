@@ -3,7 +3,7 @@
 #include "ASfuncDef.h"
 #include "TCoutput.h"
 #include "TCtokens.h"
-
+#include "TCglobals.h"
 namespace toycalc{
 
     ASfuncDef::ASfuncDef(int l, TCtoken* t, ASdefinition* varDefs[], ASstatement* state, int v_num) {
@@ -18,22 +18,31 @@ namespace toycalc{
     int ASfuncDef::getNumVarDefs() { return numVarDefs; }
 
     std::string ASfuncDef::toString() {
-        std::string s = "funcDef(\n";
-        s += ID + ",";
-        s += type->toString() + ",";
+        std::string s = "funcDef(";
+		//indent();
+        s += symTable->getSym(ID)->toString() + ",";
+        s += type->toString() + ')' + '\n';
+		s += spaces()+"(\n";
         indent();
         s += spaces() + "[\n";
         indent();
         if(numVarDefs > 0) {
-            s += varDefsList[0]->toString();
+            s += spaces()+varDefsList[0]->toString();
             for (int i=1; i < numVarDefs; i++)
                 s += ",\n"+spaces()+varDefsList[i]->toString();
         }
         outdent();
-        s += "\n"+spaces() + "]\n";
+        s += "\n"+spaces() + "],\n";
+      //  outdent();
+		s += spaces() + "[\n";
+		indent();
+		s += spaces();
+        s += statement->toString();
+		outdent();
+		//outdent();
+		s += "\n"+spaces() + "]\n";
         outdent();
-        s += "," + statement->toString();
-        s += ")\n";
+		s += spaces()+")\n";
         return s;
     }
 

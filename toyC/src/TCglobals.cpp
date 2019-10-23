@@ -14,9 +14,9 @@ namespace toycalc {
   //    public  AbstractSyntax ast = null; 
   //  public  TargetCode objectcode = null;
 
-    std::string COMPILER = "toycalc";
+    std::string COMPILER = "toyc";
     std::string VERSION = "v1.0"; 
-    std::string AUTHOR = "D. Resler";
+    std::string AUTHOR = "Jeremy Price and Matt Gelber";
 
     bool verbose=false;
 

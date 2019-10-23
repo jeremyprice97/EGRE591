@@ -2,7 +2,7 @@ int main(int i, char t) {
 	int i;
 	char c;
 	//c = 's';
-	if(v == 10);
+	if (v == 10);
 	i = i + 1;
 	i = i < 10;
 	i = (i == 10);
@@ -14,14 +14,17 @@ int main(int i, char t) {
 	while (i > 0) {
 		i =1;
 	}
+	i = what();
 	
 	if (i != 0) {
 		write(i);
 	}
+	
 	else if (i <= 1) {
-		if (i && (i!= (i < 10))) i = callFunction();
+		if (i && (i!= (i < 10))) {}
+		t = callFunction();
 		while(callFunction(callRecursively(i))) {
-			dontUseRecursionDummy();
+			dontUseRecursionDummy(t, 31, SEGFAULT, COREDUMPED);
 		}
 		i = 10 * 10;
 		i = 10 % 3;
@@ -30,7 +33,11 @@ int main(int i, char t) {
 		read(i);
 	}
 	
+	
+	bruh();
+	
 	return 0;
 }
+
 
 

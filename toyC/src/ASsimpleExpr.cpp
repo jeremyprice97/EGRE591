@@ -8,7 +8,7 @@ namespace toycalc {
 
     ASsimpleExpr::ASsimpleExpr(TCtoken* t) { expr = t; setType(simpleExpr);}
 	std::string ASsimpleExpr::toString() {
-		std::cout << "I'm in ASsimpleExpr!! before?!!!\n";
+		//std::cout << "I'm in ASsimpleExpr!! before?!!!\n";
 		std::string str = "";
 		str +=
 			((expr->getTokenType()==NUMBER) ? ("(" + expr->getLexeme() + "," + "NUMBER)")   :
