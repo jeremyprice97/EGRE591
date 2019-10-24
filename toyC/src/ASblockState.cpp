@@ -44,7 +44,8 @@ namespace toycalc {
         outdent();
         s += "\n" + spaces() + "]\n";
         outdent();
-		s += spaces() + ")\n";
+		s += spaces();
+		s += ")\n";
         return s;
     }
 }

@@ -2,7 +2,7 @@
 
 #include "ASfuncCall.h"
 #include "TCoutput.h"
-
+#include "TCglobals.h"
 namespace toycalc{
 
     ASfuncCall::ASfuncCall(int l, ASexpression* expressions[], int num) {
@@ -15,11 +15,11 @@ namespace toycalc{
     int ASfuncCall::getNumExpressions() { return numExpressions; }
 
     std::string ASfuncCall::toString() {
-        if (numExpressions==0) return "funcCall("+ ID + std::string(")");
+        if (numExpressions==0) return "funcCall("+ symTable->getSym(ID)->toString() + std::string(")");
         std::string s = "funcCall(\n";
         indent();
         s += spaces();
-        s += ID;          ///////issue here with ID
+        s += symTable->getSym(ID)->toString();          ///////issue here with ID
         s += ",\n";
         s += spaces() + "[\n";
         indent();
