@@ -36,7 +36,7 @@ namespace toycalc{
         outdent();
         s += spaces() + statement->toString();
         outdent();
-		s += spaces()+")\n";
+		s += "\n"+spaces()+")";
         return s;
     }
 

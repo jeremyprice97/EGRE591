@@ -16,9 +16,10 @@ namespace toycalc {
         s += spaces() + expression->toString();
         s += ",\n" + spaces() + statement->toString();
         outdent();
-        s += spaces() + "]\n";
+        s += "\n" + spaces() + "]\n";
         outdent();
-        s += spaces() + ")";
+		s += spaces();
+        s +=  ")";
         return s;
     }
 
