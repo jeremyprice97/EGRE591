@@ -7,16 +7,19 @@
 namespace toycalc {
 
     ASsimpleExpr::ASsimpleExpr(TCtoken* t) { expr = t; setType(simpleExpr);}
-	std::string ASsimpleExpr::toString() {
-		//std::cout << "I'm in ASsimpleExpr!! before?!!!\n";
+
+    std::string ASsimpleExpr::toString() {
 		std::string str = "";
 		str +=
-			((expr->getTokenType()==NUMBER) ? ("(" + expr->getLexeme() + "," + "NUMBER)")   :
+			((expr->getTokenType()==NUMBER) ? ("(" + expr->getLexeme() + "," + "NUMBER)")  :
 			(expr->getTokenType()==ID) ? symTable->getSym(expr)->toString() :
-       "error"
-      );
+            (expr->getTokenType()==CHARLITERAL) ? ("(" + expr->getLexeme() + "," + "CHARLITERAL)") :
+            (expr->getTokenType()==STRING) ? ("(" + expr->getLexeme() + "," + "STRING)") :
+            "error"
+            );
     return ("s_expr("+ str + ")");
-  }
+    ///where does VAR come from
+    }
     /*std::string ASsimpleExpr::toString() {
 		std::cout << "I'm in ASsimpleExpr!! before?!!!\n";
         std::string str = "";

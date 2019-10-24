@@ -19,7 +19,7 @@ namespace toycalc{
     if (numDefinitions==0) return "prog([])";
     std::string s = "prog(\n";
     indent();
-    s += spaces() + name + ",\n";
+    s += spaces() + "sourceCodeFile(" + name + "),\n";
     s += spaces() + "[\n";
     indent();
 	s += spaces();

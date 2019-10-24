@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "ASifState.h"
+#include "TCoutput.h"
 
 namespace toycalc {
     ASifState::ASifState(ASexpression* exp, ASstatement* state1, ASstatement* state2){
@@ -8,13 +9,19 @@ namespace toycalc {
     }
 
     std::string ASifState::toString() {
-        std::string s = "ifState(";
-        s += expression->toString() + "," + statement1->toString();
+        std::string s = "ifState(\n";
+        indent();
+        s += spaces() + "[\n";
+        indent();
+        s += spaces() + expression->toString() + ",\n";
+        s += spaces() + statement1->toString();
         if (statement2 != NULL) {
-            s += "," + statement2->toString();
+            s += ",\n" + spaces() + statement2->toString();
         }
-
-        s += ")";
+        outdent();
+        s += "\n" + spaces() + "]\n";
+        outdent();
+        s += spaces() + ")";
         return s;
     }
 

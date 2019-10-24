@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "ASwhileState.h"
+#include "TCoutput.h"
 
 namespace toycalc {
     ASwhileState::ASwhileState(ASexpression* exp, ASstatement* state){
@@ -8,9 +9,16 @@ namespace toycalc {
     }
 
     std::string ASwhileState::toString() {
-        std::string s = "whileState(";
-        s += expression->toString() + "," + statement->toString();
-        s += ")";
+        std::string s = "whileState(\n";
+        indent();
+        s += spaces() + "[\n";
+        indent();
+        s += spaces() + expression->toString();
+        s += ",\n" + spaces() + statement->toString();
+        outdent();
+        s += spaces() + "]\n";
+        outdent();
+        s += spaces() + ")";
         return s;
     }
 

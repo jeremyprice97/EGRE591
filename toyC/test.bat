@@ -1,3 +1,4 @@
+make
 cd bin
-tc -v ../test/other.tc
+tc -v ../test/test.tc
 cd ..

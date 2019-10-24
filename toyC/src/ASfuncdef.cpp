@@ -18,12 +18,12 @@ namespace toycalc{
     int ASfuncDef::getNumVarDefs() { return numVarDefs; }
 
     std::string ASfuncDef::toString() {
-        std::string s = "funcDef(";
-		//indent();
-        s += symTable->getSym(ID)->toString() + ",";
-        s += type->toString() + ')' + '\n';
+        std::string s = "funcDef(\n";
+		indent();
+        s += spaces() + symTable->getSym(ID)->toString() + ",\n";
+        s += spaces() + type->toString() + ",\n";
 		s += spaces()+"(\n";
-        indent();
+		indent();
         s += spaces() + "[\n";
         indent();
         if(numVarDefs > 0) {
@@ -33,14 +33,8 @@ namespace toycalc{
         }
         outdent();
         s += "\n"+spaces() + "],\n";
-      //  outdent();
-		s += spaces() + "[\n";
-		indent();
-		s += spaces();
-        s += statement->toString();
-		outdent();
-		//outdent();
-		s += "\n"+spaces() + "]\n";
+        outdent();
+        s += spaces() + statement->toString();
         outdent();
 		s += spaces()+")\n";
         return s;

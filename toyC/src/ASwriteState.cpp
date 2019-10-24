@@ -15,6 +15,7 @@ namespace toycalc{
     int ASwriteState::getNumExpressions() { return numExpressions; }
 
     std::string ASwriteState::toString() {
+        if (numExpressions==0) return "writeState([])";
         std::string s = "writeState(\n";
         indent();
         s += spaces() + "[\n";
