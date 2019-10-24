@@ -2,6 +2,7 @@
 
 #include "ASreadState.h"
 #include "TCoutput.h"
+#include "TCglobals.h"
 
 namespace toycalc {
 
@@ -22,16 +23,16 @@ namespace toycalc {
         indent();
         if (numIDs > 0) {
             s += spaces();
-            s += ID[0];
+            s += symTable->getSym(ID[0])->toString();
             for (int i=1; i < numIDs; i++) {
                 s += ",\n" + spaces();
-                s += ID[i];
+                s += symTable->getSym(ID[i])->toString();
             }
         }
         outdent();
         s += "\n"+spaces() + "]\n";
         outdent();
-        s += spaces() + ")\n";
+        s += spaces() + ")";
         return s;
     }
 
