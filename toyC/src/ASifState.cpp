@@ -13,6 +13,7 @@ namespace toycalc {
         if (statement2 != NULL) {
             s += "," + statement2->toString();
         }
+
         s += ")";
         return s;
     }

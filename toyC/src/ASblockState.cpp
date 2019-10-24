@@ -21,42 +21,48 @@ namespace toycalc {
     std::string ASblockState::toString() {
         if(numVarDefs==0 && numStatements==0) return "blockState([])";
         std::string s = "blockState(\n";
-        indent();       //for varDefs
+       s += spaces() + "(\n";
+	    indent();
+		
         s += spaces() + "[\n";
+		
         indent();
+		s += spaces();
         if(numVarDefs > 0) {
             s += varDefList[0]->toString();
             for (int i=1; i < numVarDefs; i++)
                 s += ",\n"+spaces()+varDefList[i]->toString();
         }
         outdent();
-        s += "\n" + spaces() + "]\n";
+        s += "\n" + spaces() + "],\n";
 
-        indent();       //for statements
+              //for statements
         s += spaces() + "[\n";
         indent();
-		std::cout << "NumStatemnts = " << numStatements << "\n";
+		s += spaces();
+		//std::cout << "NumStatemnts = " << numStatements << "\n";
         if (numStatements > 0) {
-			std::cout << "after if, before first assingment: ASblockState" << "\n";
-			if(statementList[0] != NULL) {
-				std::cout << "isnt null\n";
+			//std::cout << "after if, before first assingment: ASblockState" << "\n";
+			/*if(statementList[0] != NULL) {
+				//std::cout << "isnt null\n";
 				int t = statementList[0]->getType();
-				std::cout << "type is = " << t << "\n";
-			}
-			std::cout << statementList[0]->toString();
+			//	std::cout << "type is = " << t << "\n";
+			}*/
+			//std::cout << statementList[0]->toString();
             s += statementList[0]->toString();
             for (int i=1; i < numStatements; i++) {
-				std::cout << "in loop: ASblockState, i = " << i << "\n";
+				//std::cout << "in loop: ASblockState, i = " << i << "\n";
                 s += ",\n"+spaces()+statementList[i]->toString();
 			}
 				
         }
-		std::cout << "After loop: ASblockState\n";
+		//std::cout << "After loop: ASblockState\n";
         outdent();
         s += "\n" + spaces() + "]\n";
 
         outdent();
-        s += spaces() + ")\n";
+		s += spaces();
+        s +=  ")\n";
         return s;
     }
 }

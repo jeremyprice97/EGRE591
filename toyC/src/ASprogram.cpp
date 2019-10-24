@@ -22,8 +22,9 @@ namespace toycalc{
     s += spaces() + name + ",\n";
     s += spaces() + "[\n";
     indent();
+	s += spaces();
     if (numDefinitions > 0) {
-      s += (spaces()+definitionList[0]->toString());
+      s += (definitionList[0]->toString());
       for (int i=1; i < numDefinitions; i++)
         s += ",\n"+spaces()+definitionList[i]->toString();
     }
