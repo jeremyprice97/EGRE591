@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "ASexprState.h"
+#include "TCoutput.h"
 
 namespace toycalc {
 
@@ -10,7 +11,17 @@ namespace toycalc {
     ASexpression *ASexprState::getExpression() { return expression; }
 
     std::string ASexprState::toString() {
-        return "exprState("+expression->toString()+")";
+        std::string s = "exprState(\n";
+        indent();
+        s += spaces() + "[\n";
+        indent();
+        s += spaces() + expression->toString();
+        outdent();
+        s += "\n" + spaces() + "]\n";
+        outdent();
+        s += spaces() + ")";
+        return s;
+        //return "exprState("+expression->toString()+")";
     }
 
 }
