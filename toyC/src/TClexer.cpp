@@ -291,25 +291,6 @@ namespace toycalc {
   int TClexer::getPos() { return pos; }
   int TClexer::getLineNum() { return lineNum; }
 
-    /*char getChar() {
-        do {
-            if (infile.eof()) return EOFCHAR;
-            if (line.empty() || pos > line.length()) line = getNextLine();
-            char ch = line[pos];
-            if ( ((ch == '/') && (line[pos+1] == '/')) || (ch == '\0') ) {
-                line = getNextLine();
-                ch = line[pos];
-            }
-            if (isInAlphabet(ch) || isspace(ch)) break;
-
-            reportWARNING("","illegal character ignored 2");
-            //      reportWARNING("","illegal character '"+line[pos]+"' ignored")
-            pos++;
-
-        } while (true);
-        return line[pos++];
-    }*/
-
   char getChar() {
     do {
       if (infile.eof()) return EOFCHAR;
@@ -322,26 +303,23 @@ namespace toycalc {
       if ( ((line[0] == '/') && (line[1] == '/')) || ((ch == '/') && (line[pos+1] == '/')) ) {
           line = getNextLine();
           ch = line[pos];
+          continue;
       }
       if((ch == '/') && (line[pos+1] == '*')) {									//this case added my Matthew and Jeremy
           blockCommentCount++;
-          //printf("1: + blockCommentCount %d\n",blockCommentCount);
           pos++;
           while(!((ch == '*') && (line[pos+1] == '/')) || blockCommentCount>1) {
               if((ch == '/') && (line[pos+1] == '*')) {
                   blockCommentCount++;
-                  //printf("2: + blockCommentCount %d\n",blockCommentCount);
               }
               if((ch == '*') && (line[pos+1] == '/')) {
                   blockCommentCount--;
-                  //printf("3: - blockCommentCount %d\n",blockCommentCount);
               }
               pos++;
               if (line.empty() || pos > line.length()) line = getNextLine();
               ch = line[pos];
           }
           blockCommentCount--;
-          //printf("4: - blockCommentCount %d\n",blockCommentCount);
           pos += 2;
       }
       if (isInAlphabet(ch) || isspace(ch)) break;
