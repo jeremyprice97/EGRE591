@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "ASexpr.h"
+#include "TCoutput.h"
 
 namespace toycalc {
     ASexpr::ASexpr(TCtoken* opr, ASexpression* oper1, ASexpression* oper2){
@@ -8,16 +9,18 @@ namespace toycalc {
     }
 
     std::string ASexpr::toString() {
-		//std::cout << "I'm in ASexpr!! before?!!!\n";
-		//std::string s = oper->getLexeme();
-		//std::cout << "got oper lexeme" + oper->toString() + "."<< std::endl;
-		//std::string s1 = op1->toString();
-		//std::cout << "got first op1" << op1->toString()<< std::endl;
-		//std::string s2 = op2->toString();
-		//std::cout << "got second op2" << std::endl;
-        return ("expr("+oper->toString()+","+
-                op1->toString()+","+
-                op2->toString()+")");
+        std::string s = "expr(\n";
+        indent();
+        s += spaces() + "[\n";
+        indent();
+        s += spaces() + oper->toString()+",\n"+
+             spaces() + op1->toString()+",\n"+
+             spaces() + op2->toString()+"\n";
+        outdent();
+        s += spaces() + "]\n";
+        outdent();
+        s += spaces() + ")";
+        return s;
 
     }
 
