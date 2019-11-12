@@ -16,7 +16,8 @@ namespace toycalc {
         std::string toString();
 
         std::string getName();
-        ASdefinition *getDefinition(int);
+        ASdefinition** getDefinitionList();
+		ASdefinition* getDefinition(int);
         int getNumDefinitions();
 
     private:
