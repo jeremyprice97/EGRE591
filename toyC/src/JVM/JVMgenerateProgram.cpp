@@ -5,6 +5,7 @@
 //#include "ASlabelState.h"
 #include "JVMtargetCode.h"
 #include "JVMgenerateProgram.h"
+#include "JVMgenerateDefinition.h"
 #include "JVMgenerateStatement.h"
 #include "JVMgenGlobals.h"
 #include "JVMgenUtils.h"
@@ -65,10 +66,10 @@ namespace toycalc {
     gen_main_header(tc);
     gen_stack_limit_directive(tc);
     gen_locals_limit_directive(tc);
-    if (thereIsInput(definitions,num)) gen_input_stream_store(tc);
-    if (thereIsOutput(definitions,num)) gen_output_stream_store(tc);
+   // if (thereIsInput(definitions,num)) gen_input_stream_store(tc);
+   // if (thereIsOutput(definitions,num)) gen_output_stream_store(tc);
     for (int i=0; i < num; i++) {
-      JVMgenerateDefinition::genDefinition(definitions->getDefinition(i),tc);
+      JVMgenerateDefinition::genDefinition(definitions[i],tc);
     }
     tc->add(new RETURN());
     tc->add(new end());
@@ -108,7 +109,7 @@ namespace toycalc {
     tc->add(new throws_(IOEXCEPTION));
   }
 
-  bool JVMgenerateProgram::thereIsInput(ASstatement** s,int num) {
+  /*bool JVMgenerateProgram::thereIsInput(ASstatement** s,int num) {
     for (int i=0; i < num; i++) {
       ASstatement *stmnt = s[i];
       if (stmnt->getType()==READstate) return true;
@@ -134,7 +135,7 @@ namespace toycalc {
         }
     }
     return false;
-  }
+  }*/
 
   void JVMgenerateProgram::gen_output_stream_store(JVMtargetCode *tc) {
       tc->add(new GETSTATIC(OUTPUT_FIELD_SPEC,OUTPUT_DESCRIPTOR));

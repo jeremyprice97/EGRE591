@@ -2,6 +2,7 @@
 #include "ASdefinition.h"
 #include "ASfuncdef.h"
 #include "ASvarDef.h"
+#include "JVMgenerateDefinition.h"
 
 #include "JVMtargetCode.h"
 

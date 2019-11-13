@@ -1,13 +1,13 @@
 #include <iostream>
 #include "ASstatement.h"
-#include "ASassignState.h"
+/*#include "ASassignState.h"
 #include "ASgotoState.h"
 #include "ASifState.h"
 #include "ASlabelState.h"
 #include "ASwriteState.h"
 #include "ASreadState.h"
 #include "ASskipState.h"
-#include "ASsimpleExpr.h"
+#include "ASsimpleExpr.h"*/
 
 #include "JVMtargetCode.h"
 

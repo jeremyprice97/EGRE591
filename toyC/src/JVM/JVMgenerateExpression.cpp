@@ -18,7 +18,7 @@
 namespace toycalc {
   void JVMgenerateExpression::genExpression(ASexpr *ast,JVMtargetCode *tc) {
     enum exprType etype = ast->getType();
-    if(etype == simpleExpr){
+   /* if(etype == simpleExpr){
 
     } else if(etype == funcCall) {
 
