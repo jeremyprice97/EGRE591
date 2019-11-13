@@ -18,6 +18,30 @@
 namespace toycalc {
   void JVMgenerateExpression::genExpression(ASexpr *ast,JVMtargetCode *tc) {
     enum exprType etype = ast->getType();
+    if(etype == simpleExpr){
+
+    } else if(etype == funcCall) {
+
+    } else if(etype == expr) {
+        ASexpr *e = dynamic_cast<ASexpr*>(ast);
+        genExpression(e->getOp1(),tc);
+        genExpression(e->getOp2(),tc);
+        TCtoken *op = be->getOper();
+        switch (op->getTokenType()) {
+            case ADDOP: JVMgenUtils::gen_ADDOP(*op,tc); break;
+            case MULOP: JVMgenUtils::gen_MULOP(*op,tc); break;
+            case RELOP: JVMgenUtils::gen_RELOP(*op,tc); break;
+            case OR:    JVMgenUtils::gen_OR(*op,tc); break;
+            case AND:   JVMgenUtils::gen_AND(*op,tc); break;
+            default: // shouldn't happen
+                std::cerr << "Fatal internal error #1: JVMgenerateExpression" << std::endl;
+                exit(EXIT_FAILURE);
+        }
+    } else if(etype == minus) {
+
+    } else if(etype == NoT) {
+
+    }
    /* if (etype==BINARYexpr){
       ASbinaryExpr *be = dynamic_cast<ASbinaryExpr*>(ast);
       genExpression(be->getOp1(),tc); genExpression(be->getOp2(),tc);
