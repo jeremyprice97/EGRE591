@@ -18,8 +18,15 @@
 namespace toycalc {
   void JVMgenerateExpression::genExpression(ASexpression *ast,JVMtargetCode *tc) {
     enum exprType etype = ast->getType();
-   /* if(etype == simpleExpr){
-
+    if(etype == simpleExpr){
+		ASsimpleExpr *se = dynamic_cast<ASsimpleExpr*>(ast);
+		TCtoken *t = se->getExpr();
+      std::string lexeme = t->getLexeme();
+      if(t->getTokenType()==ID) {
+        TCsymbol *idsym = symTable->getSym(symTable->find(lexeme));
+        JVMgenUtils::gen_ILOAD(*idsym,tc);
+      } else if(t->getTokenType()==NUM) {
+       JVMgenUtils::gen_ICONST(stoi(lexeme),tc);
     } else if(etype == funcCall) {
 
     } else if(etype == expr) {
