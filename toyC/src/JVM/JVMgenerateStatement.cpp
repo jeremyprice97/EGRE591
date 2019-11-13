@@ -38,7 +38,7 @@ namespace toycalc {
         ASblockState *s = dynamic_cast<ASblockState*>(ast);
         int num = s->getNumStatements();
         for(int i=0; i < num; i++) {
-            JVMgenerateStatement::genStatement(s->getStatement(i));
+            JVMgenerateStatement::genStatement(s->getStatement(i),tc);
         }
     } else if (stype == ifState) {
 

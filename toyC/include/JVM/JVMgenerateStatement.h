@@ -5,7 +5,9 @@
 #include "TCsymTable.h"
 
 #include "ASstatement.h"
-#include "ASexpr.h"
+#include "ASexpression.h"
+#include "ASexprState.h"
+#include "ASblockState.h"
 #include "JVMtargetCode.h"
 
 /*

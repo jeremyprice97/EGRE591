@@ -14,7 +14,7 @@ namespace toycalc {
     }
 
     ASdefinition* ASblockState::getVarDefs(int n) { return varDefList[n]; }
-    ASstatement* ASblockState::getStatements(int n) { return statementList[n]; }
+    ASstatement* ASblockState::getStatement(int n) { return statementList[n]; }
     int ASblockState::getNumVarDefs() { return numVarDefs; }
     int ASblockState::getNumStatements() { return numStatements; }
 

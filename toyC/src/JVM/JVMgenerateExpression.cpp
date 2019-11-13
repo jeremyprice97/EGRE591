@@ -3,7 +3,7 @@
 
 #include "JVMgenerateExpression.h"
 
-#include "ASexpr.h"
+#include "ASexpression.h"
 //#include "ASbinaryExpr.h"
 //#include "ASunaryExpr.h"
 #include "ASsimpleExpr.h"
@@ -16,7 +16,7 @@
 #include "INEG.h"
 
 namespace toycalc {
-  void JVMgenerateExpression::genExpression(ASexpr *ast,JVMtargetCode *tc) {
+  void JVMgenerateExpression::genExpression(ASexpression *ast,JVMtargetCode *tc) {
     enum exprType etype = ast->getType();
    /* if(etype == simpleExpr){
 

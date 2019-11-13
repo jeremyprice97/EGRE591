@@ -15,7 +15,7 @@ namespace toycalc {
         std::string toString();
 
         ASdefinition *getVarDefs(int);
-        ASstatement *getStatements(int);
+        ASstatement *getStatement(int);
         int getNumVarDefs();
         int getNumStatements();
 
