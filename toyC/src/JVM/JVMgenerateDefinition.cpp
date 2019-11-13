@@ -20,13 +20,14 @@
 
 namespace toycalc {
 
-  void JVMgeneratedDefinition::genDefinition(ASdefinition *ast,JVMtargetCode *tc) {
+  void JVMgenerateDefinition::genDefinition(ASdefinition *ast,JVMtargetCode *tc) {
     enum defType dtype = ast->getType();
 	if(dtype==funcDef) {
 		ASfuncDef *fd = dynamic_cast<ASfuncDef*>(ast);
 		ASstatement *statement = fd->getStatement();
+		JVMgenerateStatement::genStatement(statement, tc);
 	} else if (dtype == varDef) {
-	
+		
 	}
 	
 	
