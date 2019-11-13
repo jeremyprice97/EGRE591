@@ -8,6 +8,7 @@ namespace toycalc{
 
     ASfuncDef::ASfuncDef(int l, TCtoken* t, ASdefinition* varDefs[], ASstatement* state, int v_num) {
         ID = l; type = t; statement = state; numVarDefs = v_num;
+        setType(funcDef);
         for (int i = 0; i < v_num; i++) varDefsList[i] = varDefs[i];
     }
 

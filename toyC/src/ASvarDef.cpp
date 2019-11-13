@@ -8,6 +8,7 @@ namespace toycalc{
 
     ASvarDef::ASvarDef(int l, TCtoken* t) {
         ID = l; type = t;
+        setType(varDef);
     }
 
     int ASvarDef::getID() { return ID; }
