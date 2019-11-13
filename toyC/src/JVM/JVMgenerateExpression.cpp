@@ -52,8 +52,7 @@ namespace toycalc {
                   ASsimpleExpr *exp1 = dynamic_cast<ASsimpleExpr *>(e->getOp1());
                   TCtoken *tok1 = exp1->getExpr();
                   JVMgenUtils::gen_ISTORE(*symTable->getSym(tok1), tc);
-                  }
-                  break;
+                  }break;
               default: // shouldn't happen
                   std::cerr << "Fatal internal error #1: JVMgenerateExpression" << std::endl;
                   exit(EXIT_FAILURE);
