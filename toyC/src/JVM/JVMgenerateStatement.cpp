@@ -28,7 +28,33 @@ namespace toycalc {
 
   void JVMgenerateStatement::genStatement(ASstatement *ast,JVMtargetCode *tc) {
     enum stateType stype = ast->getType();
-	
+	if (stype == exprState) {
+        ASexprState *es = dynamic_cast<ASexprState*>(ast);
+        ASexpression *expr = dynamic_cast<ASexpression*>(es->getExpression());
+        JVMgenerateExpression::genExpression(expr,tc);
+    } else if (stype == breakState) {
+
+    } else if (stype == blockState) {
+        ASblockState *s = dynamic_cast<ASblockState*>(ast);
+        int num = s->getNumStatements();
+        for(int i=0; i < num; i++) {
+            JVMgenerateStatement::genStatement(s->getStatement(i));
+        }
+    } else if (stype == ifState) {
+
+    } else if (stype == nullState) {
+
+    } else if (stype == returnState) {
+
+    } else if (stype == whileState) {
+
+    } else if (stype == readState) {
+
+    } else if (stype == writeState) {
+
+    } else if (stype == newLineState) {
+
+    }
 	
 	
 	
