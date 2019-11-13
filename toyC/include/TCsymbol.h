@@ -17,10 +17,14 @@ namespace toycalc {
     void setId(std::string);
     enum symType getType();
     void setType(enum symType);
+	int getOffset();
+    void setOffset(int);
+    static int getNextOffset();
     std::string toString();
     
   private:
     std::string id;
+	int offset;
     enum symType type;
   };
 

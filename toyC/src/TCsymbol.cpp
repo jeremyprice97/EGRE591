@@ -3,6 +3,8 @@
 
 namespace toycalc {
 
+  int _nextOffset = 1;
+	
   TCsymbol::TCsymbol() { id = ""; type = NO_TYPE; }
   TCsymbol::TCsymbol(std::string str, enum symType t) {
     id = str; type = t;
@@ -12,6 +14,9 @@ namespace toycalc {
   void TCsymbol::setId(std::string str) { id = str; }
   enum symType TCsymbol::getType() { return type; }
   void TCsymbol::setType(enum symType t) { type = t; }
+  int TCsymbol::getOffset() { return offset; }
+  void TCsymbol::setOffset(int n) { offset = n; }
+  int TCsymbol::getNextOffset() { return _nextOffset++; }
 
   std::string TCsymbol::toString() {
     std::string str="(";
