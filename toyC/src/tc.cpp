@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
         //    turnVerboseOn();
 		
         p = parser->parse();                      //parser only
-		cout << p->toString();                    //parser only
+        if(verbose) cout << p->toString();                    //parser only
         //while ((tok=scanner->getToken()->getTokenType()) != EOFILE) ;     //scanner only
     } catch(...) {
         std::cerr << "ERROR: scanning failed" << std::endl;
