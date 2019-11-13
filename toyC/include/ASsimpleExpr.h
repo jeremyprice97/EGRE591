@@ -3,6 +3,7 @@
 
 #include "ASexpression.h"
 #include "TCtoken.h"
+#include "TCsymbol.h"
 
 namespace toycalc {
 
@@ -11,6 +12,7 @@ namespace toycalc {
         ASsimpleExpr(TCtoken *);
         std::string toString();
         TCtoken* getExpr();
+        TCSymbol* getId();
 
     private:
         TCtoken *expr;
