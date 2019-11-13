@@ -1,4 +1,4 @@
 make
 cd bin
-tc ../test/test.tc
+tc -v ../test/main.tc
 cd ..

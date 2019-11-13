@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sstream>
+#include <vector>
 
 #include "TCtoken.h"
 #include "TClexer.h"
@@ -8,6 +10,11 @@
 
 #include "AbstractSyntax.h"
 
+#include "CGcodeGenerator.h"
+#include "CGtargetCode.h"
+#include "JVMcodeGenerator.h"
+#include "JVMtargetCode.h"
+
 /*Provided by Dr. Resler*/
 
 using namespace toycalc;
@@ -15,6 +22,7 @@ using namespace std;
 
 void processCommandLine(int, char *[]);
 void printUsageMessage();
+std::string getProgramName(std::string);
 
 int main(int argc, char *argv[]) {
     try {
@@ -24,9 +32,16 @@ int main(int argc, char *argv[]) {
         //int tok;                                    //scanner only
 		ASabstractSyntax* p = NULL;                 //parser only
         //    turnVerboseOn();
-		
+		//cout << "111111111111111111111111111111111111111111111111111\n";
         p = parser->parse();                      //parser only
+        //cout << "222222222222222222222222222222222222222222222222222\n";
         if(verbose) cout << p->toString();                    //parser only
+        //cout << endl;
+        //cout << "333333333333333333333333333333333333333333333333333\n";
+        CGcodeGenerator *cg = new JVMcodeGenerator();
+        CGtargetCode* tc = cg->generateCode(p);
+        if(verbose) tc->writeCode(tc,targetFileName);
+
         //while ((tok=scanner->getToken()->getTokenType()) != EOFILE) ;     //scanner only
     } catch(...) {
         std::cerr << "ERROR: scanning failed" << std::endl;
@@ -36,20 +51,38 @@ int main(int argc, char *argv[]) {
 
 void processCommandLine(int argc, char *argv[]) {
     switch(argc) {
-        case 1: printUsageMessage(); break;
-        case 2: if (argv[1][0] != '-')
+        case 1: printUsageMessage(); exit(EXIT_FAILURE);
+        case 2: if (argv[1][0] != '-') {
                 inputFileName = argv[1];
-            else
-                printUsageMessage();
-            break;
+                break;
+            } else {
+                printUsageMessage(); exit(EXIT_SUCCESS);
+            };
         case 3: if (argv[1][0]=='-' && argv[1][1]=='v') {
                 turnVerboseOn();
                 inputFileName = argv[2];
-            } else printUsageMessage();
-            break;
-
+                break;
+            } else {
+                printUsageMessage(); exit(EXIT_FAILURE);
+            }
         default: printUsageMessage();
     }
+    outputClassFileName = getProgramName(inputFileName);
+    targetFileName = outputClassFileName+"."+ASM_FILE_EXTENSION;
+}
+vector<string> split (const string &s, char delim) {
+    vector<string> result;
+    stringstream ss (s);
+    string item;
+    while (getline (ss, item, delim)) {
+        result.push_back (item);
+    }
+    return result;
+}
+
+std::string getProgramName(std::string s) {
+    vector<string> strs = split(s,'/');
+    return split(strs[strs.size()-1],'.')[0];
 }
 
 void printUsageMessage() {

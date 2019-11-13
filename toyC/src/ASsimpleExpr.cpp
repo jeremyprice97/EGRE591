@@ -8,7 +8,7 @@
 namespace toycalc {
 
     ASsimpleExpr::ASsimpleExpr(TCtoken* t) { expr = t; setType(simpleExpr);}
-    TCSymbol* ASsimpleExpr::getId() { return symTable->getSym(expr); }
+    TCsymbol* ASsimpleExpr::getId() { return symTable->getSym(expr); }
     std::string ASsimpleExpr::toString() {
 		std::string str = "";
 		str +=

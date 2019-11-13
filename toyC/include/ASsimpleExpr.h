@@ -12,7 +12,7 @@ namespace toycalc {
         ASsimpleExpr(TCtoken *);
         std::string toString();
         TCtoken* getExpr();
-        TCSymbol* getId();
+        TCsymbol* getId();
 
     private:
         TCtoken *expr;
