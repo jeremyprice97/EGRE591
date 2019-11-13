@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <time.h>
+#include <bits/stdc++.h>	
 //#include <cstring>
 #include "timeAndSourceComment.h"
 

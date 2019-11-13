@@ -124,7 +124,10 @@ namespace toycalc{
         if(buff->getTokenType() == ID) {
 			sym = symTable->getSym(buff);
 			loc = symTable->find(buff->getLexeme());
-			if(loc == -1) loc = symTable->add(new TCsymbol(buff->getLexeme(), NO_TYPE));
+			if(loc == -1) {
+				loc = symTable->add(new TCsymbol(buff->getLexeme(), NO_TYPE));
+				sym->setOffset(TCsymbol::getNextOffset());
+			}
 			enum symType stype = symTable->getSym(loc)->getType();
             buff = scanner->getToken();
             if (buff->getTokenType() != SEMICOLON) {
@@ -138,6 +141,7 @@ namespace toycalc{
             } else {
 				if(stype == NO_TYPE) {
 					symTable->getSym(loc)->setType(VAR);
+					sym->setOffset(TCsymbol::getNextOffset());
 				}	
 				else if (stype == FUNC) {
 					//reportSEMANTIC_ERROR(scanner, "variable name expected");
@@ -207,10 +211,14 @@ namespace toycalc{
         if(buff->getTokenType() == ID) {
 			sym = symTable->getSym(buff);
 			loc = symTable->find(buff->getLexeme());
-			if(loc == -1) loc = symTable->add(new TCsymbol(buff->getLexeme(), NO_TYPE));
+			if(loc == -1) {
+				loc = symTable->add(new TCsymbol(buff->getLexeme(), NO_TYPE));
+				sym->setOffset(TCsymbol::getNextOffset());
+			}
 			enum symType stype = symTable->getSym(loc)->getType();
 			if(stype == NO_TYPE) {
 				symTable->getSym(loc)->setType(VAR);
+				sym->setOffset(TCsymbol::getNextOffset());
 			} else if (stype == FUNC) {
 				//reportSEMANTIC_ERROR(scanner, "var name expected");
 			}
@@ -226,10 +234,14 @@ namespace toycalc{
             if(buff->getTokenType() == ID) {
 				sym = symTable->getSym(buff);
 				loc = symTable->find(buff->getLexeme());
-				if(loc == -1) loc = symTable->add(new TCsymbol(buff->getLexeme(), NO_TYPE));
+				if(loc == -1) {
+					loc = symTable->add(new TCsymbol(buff->getLexeme(), NO_TYPE));
+					sym->setOffset(TCsymbol::getNextOffset());
+				}
 				enum symType stype = symTable->getSym(loc)->getType();
 				if(stype == NO_TYPE) {
 					symTable->getSym(loc)->setType(VAR);
+					sym->setOffset(TCsymbol::getNextOffset());
 				} else if (stype == FUNC) {
 					//reportSEMANTIC_ERROR(scanner, "var name expected");
 				}
@@ -319,10 +331,14 @@ namespace toycalc{
             if(buff->getTokenType() == ID) {
 				sym = symTable->getSym(buff);
 				loc = symTable->find(buff->getLexeme());
-				if(loc == -1) loc = symTable->add(new TCsymbol(buff->getLexeme(), NO_TYPE));
+				if(loc == -1) {
+					loc = symTable->add(new TCsymbol(buff->getLexeme(), NO_TYPE));
+					sym->setOffset(TCsymbol::getNextOffset());
+				}
 				enum symType stype = symTable->getSym(loc)->getType();
 				if(stype == NO_TYPE) {
 					symTable->getSym(loc)->setType(VAR);
+					sym->setOffset(TCsymbol::getNextOffset());
 				} else if (stype == FUNC) {
 					//reportSEMANTIC_ERROR(scanner, "var name expected");
 				}
