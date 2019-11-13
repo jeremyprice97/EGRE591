@@ -68,7 +68,7 @@ namespace toycalc {
     if (thereIsInput(definitions,num)) gen_input_stream_store(tc);
     if (thereIsOutput(definitions,num)) gen_output_stream_store(tc);
     for (int i=0; i < num; i++) {
-      JVMgenerateStatement::genDefinition(definitions[i],tc);
+      JVMgenerateDefinition::genDefinition(definitions->getDefinition(i),tc);
     }
     tc->add(new RETURN());
     tc->add(new end());

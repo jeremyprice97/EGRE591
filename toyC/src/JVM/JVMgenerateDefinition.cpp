@@ -21,7 +21,17 @@
 namespace toycalc {
 
   void JVMgeneratedDefinition::genDefinition(ASdefinition *ast,JVMtargetCode *tc) {
-    enum stateType stype = ast->getType();
+    
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*enum stateType stype = ast->getType();
     if (stype==ASSIGNstate){
       ASassignState *as = dynamic_cast<ASassignState*>(ast);
       ASexpr *expr = as->getExpression();
@@ -56,7 +66,7 @@ namespace toycalc {
       JVMgenerateStatement::genStatement(ls->getStatement(),tc);
     } else if (stype==SKIPstate) {
       // do nothing
-    }
+    }*/
   }
 
 }
