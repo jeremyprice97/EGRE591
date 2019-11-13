@@ -12,6 +12,7 @@ namespace toycalc{
   }
 
   std::string ASprogram::getName() { return name; }
+  ASdefinition** ASprogram::getDefinitionList() { return definitionList; }
   ASdefinition* ASprogram::getDefinition(int n) { return definitionList[n]; }
   int ASprogram::getNumDefinitions() { return numDefinitions; }
   
