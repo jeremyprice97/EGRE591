@@ -14,14 +14,14 @@ Part 2: completed
 Part 3: in progress
     - code generation
 
-Documentation for running part 3 below.
+Documentation for part 3:
 
-To test the main project, proceed as normal:
-    - steps
+
+    - to run and test the main project, proceed as normal
         - make clean -> make -> tc -v "<file_name>.tc"
 
-To run D_JAVA:
-    - steps
+
+    - to run D_JAVA
         - download the d-java project from the class webpage
         - unzip the file into any location
         - in command/terminal navigate to where d-java is (C:\...\d-java)
@@ -31,8 +31,8 @@ To run D_JAVA:
         - navigate back to where d-java is located and type (for windows) "D-Java.exe -o jasmin main.class>file_name.txt"
         - the ">file_name.txt" sends the output from d-java to that file
 
-To run Jasmin:
-    - steps
+
+    - to run Jasmin
         - go to http://jasmin.sourceforge.net/ and download the jasmin file
         - jasmin is already compiled into a .jar file
         - when you run the main project, a .j file will be created in the bin directory
