@@ -1,6 +1,8 @@
 Project: EGRE 591: Compiler Construction Project
-Language: C++
+
 Group Members: Matthew Gelber and Jeremy Price
+
+Language: C++
 
 Part 1: completed
     - scanner/lexer
