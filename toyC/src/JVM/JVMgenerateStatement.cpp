@@ -24,6 +24,8 @@
 #include "INVOKEVIRTUAL.h"
 #include "LDC.h"
 
+//todo: finish rest of statements
+
 namespace toycalc {
 
   void JVMgenerateStatement::genStatement(ASstatement *ast,JVMtargetCode *tc) {

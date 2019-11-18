@@ -16,6 +16,9 @@
 
 #include "INEG.h"
 
+//todo: finish minus / NoT
+//todo: maybe fix assignop
+
 namespace toycalc {
   void JVMgenerateExpression::genExpression(ASexpression *ast,JVMtargetCode *tc) {
       enum exprType etype = ast->getType();

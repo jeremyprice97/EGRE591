@@ -32,6 +32,9 @@
 #include "NEW.h"
 #include "RETURN.h"
 
+//todo: fix gen_stack_limit_directive(tc) AND gen_locals_limit_directive(tc);
+//todo: fix thereIsInput() AND thereIsOutput()
+
 namespace toycalc {
 
   void JVMgenerateProgram::genProgram(ASprogram *ast,JVMtargetCode *tc) {

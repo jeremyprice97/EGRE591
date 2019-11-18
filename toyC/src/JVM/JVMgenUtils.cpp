@@ -57,6 +57,8 @@
 #include "label.h"
 #include "codeLabel.h"
 
+//todo: fix gen_relop, gen_mulop, gen_addop
+
 namespace toycalc {
 
   void JVMgenUtils::gen_ISTORE(TCsymbol id,JVMtargetCode *tc){
@@ -143,7 +145,7 @@ namespace toycalc {
   void JVMgenUtils::gen_RELOP(TCtoken tok, JVMtargetCode *tc) {
     label *l0 = new label(), *l1 = new label();
     if (tok.getLexeme()=="==")      tc->add(new IF_ICMPNE(l0));
-    else if (tok.getLexeme()=="<>") tc->add(new IF_ICMPEQ(l0));
+    else if (tok.getLexeme()=="!=") tc->add(new IF_ICMPEQ(l0));
     else if (tok.getLexeme()=="<")  tc->add(new IF_ICMPGE(l0));
     else if (tok.getLexeme()=="<=") tc->add(new IF_ICMPGT(l0));
     else if (tok.getLexeme()==">")  tc->add(new IF_ICMPLE(l0));
