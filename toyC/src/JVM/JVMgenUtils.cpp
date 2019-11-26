@@ -39,6 +39,9 @@
 #include "SIPUSH.h"
 #include "LDC.h"
 #include "IADD.h"
+#include "IAND.h"
+#include "IOR.h"
+#include "IREM.h"
 #include "ISUB.h"
 #include "IMUL.h"
 #include "IDIV.h"
@@ -57,7 +60,9 @@
 #include "label.h"
 #include "codeLabel.h"
 
-//todo: fix gen_relop, gen_mulop, gen_addop
+//todo: fix gen_relop -> couldn't find anything to fix
+// gen_mulop -> added %, &&
+// gen_addop -> added ||
 
 namespace toycalc {
 
@@ -121,10 +126,9 @@ namespace toycalc {
   }
 
   void JVMgenUtils::gen_ADDOP(TCtoken tok, JVMtargetCode *tc) {
-    if (tok.getLexeme()=="+")
-      tc->add(new IADD());
-    else if (tok.getLexeme()=="-")
-      tc->add(new ISUB());
+    if (tok.getLexeme()=="+")        tc->add(new IADD());
+    else if (tok.getLexeme()=="-")   tc->add(new ISUB());
+    else if (tok.getLexeme()=="||")  tc->add(new IOR());                //added this
     else { // shouldn't happen
       std::cerr << "Error: gen_ADDOP: internal error" << std::endl;
       exit(EXIT_FAILURE);
@@ -132,10 +136,10 @@ namespace toycalc {
   }
  
   void JVMgenUtils::gen_MULOP(TCtoken tok, JVMtargetCode *tc) {
-    if (tok.getLexeme()=="*")
-      tc->add(new IMUL());
-    else if (tok.getLexeme()=="/")
-      tc->add(new IDIV());
+    if (tok.getLexeme()=="*")        tc->add(new IMUL());
+    else if (tok.getLexeme()=="/")   tc->add(new IDIV());
+    else if (tok.getLexeme()=="%")   tc->add(new IREM());                //added this
+    else if (tok.getLexeme()=="&&")  tc->add(new IAND());                //added this
     else { // shouldn't happen
       std::cerr << "Error: gen_MULOP: internal error" << std::endl;
       exit(EXIT_FAILURE);

@@ -112,14 +112,14 @@ namespace toycalc {
     tc->add(new throws_(IOEXCEPTION));
   }
 
-  /*bool JVMgenerateProgram::thereIsInput(ASstatement** s,int num) {
+  /*bool JVMgenerateProgram::thereIsInput(ASexpression** exp, int num) {
     for (int i=0; i < num; i++) {
-      ASstatement *stmnt = s[i];
-      if (stmnt->getType()==READstate) return true;
+      ASexpression *ex = exp[i];
+      if (ex->getType()==READstate) return true;
       else
-       while (stmnt->getType()==LABELstate) {
-          ASlabelState *ls = dynamic_cast<ASlabelState*>(stmnt);
-          stmnt = ls->getStatement();
+       while (ex->getType()==LABELstate) {
+          ASlabelState *ls = dynamic_cast<ASlabelState*>(ex);
+          ex = ls->getStatement();
           if(stmnt->getType()==READstate) return true;
        }
      }
