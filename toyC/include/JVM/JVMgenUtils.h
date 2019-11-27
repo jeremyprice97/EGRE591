@@ -21,6 +21,7 @@ namespace toycalc {
     static void gen_RELOP(TCtoken,JVMtargetCode*);
     static void gen_OR(TCtoken,JVMtargetCode*);
     static void gen_AND(TCtoken,JVMtargetCode*);
+    static void gen_NOT(JVMtargetCode*);
     static int getUniqueInt() { return uniqueInt++; }
 
   };

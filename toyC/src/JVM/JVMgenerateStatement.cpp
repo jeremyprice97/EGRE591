@@ -23,7 +23,7 @@
 
 #include "GOTO.h"
 #include "IFNE.h"
-#include "NOP.h"
+#include "ICONST_0.h"
 #include "RETURN.h"
 #include "INVOKESPECIAL.h"
 #include "INVOKEVIRTUAL.h"
@@ -59,8 +59,8 @@ namespace toycalc {
             JVMgenerateStatement::genStatement(if_state2,tc);
         }
     } else if (stype == nullState) {                      //edited ifState 11/25
-        ASnullState *ns = dynamic_cast<ASnullState*>(ast);
-        tc->add(new NOP());
+        //ASnullState *ns = dynamic_cast<ASnullState*>(ast);
+        tc->add(new ICONST_0());
     } else if (stype == returnState) {                      //edited ifState 11/25
 	    ASreturnState *rs = dynamic_cast<ASreturnState*>(ast);
 	    if(rs->getExpression() != NULL){
@@ -75,19 +75,28 @@ namespace toycalc {
         ASstatement *w_state = dynamic_cast<ASstatement*>(ws->getStatement());
         JVMgenerateStatement::genStatement(w_state,tc);
     } else if (stype == readState) {                      //edited ifState 11/25
-        ASreadState *read_s = dynamic_cast<ASreadState*>(ast);
+        /*ASreadState *read_s = dynamic_cast<ASreadState*>(ast);
         int num = read_s->getNumIDs();
         for(int i=0; i < num; i++) {
             JVMgenerateExpression::genExpression(read_s->getID(i),tc);     //todo: must uncomment, only commented out to compile!!!!!
         }
-        //do something else here?
+        //do something else here?*/
+        ASreadState *read_s = dynamic_cast<ASreadState*>(ast);
+        int num = read_s->getNumIDs();
+        // now input value
+        for(int i=0; i < num; i++) {
+            JVMgenUtils::gen_ALOAD(*symTable->getSym(symTable->find("System.in")),tc);
+            tc->add(new INVOKEVIRTUAL(READ_INT_METHOD_SPEC));
+            JVMgenUtils::gen_ISTORE(*symTable->getSym(read_s->getID(i)), tc);
+        }
     } else if (stype == writeState) {                      //edited ifState 11/25
         ASwriteState *write_s = dynamic_cast<ASwriteState*>(ast);
         int num = write_s->getNumExpressions();
         for(int i=0; i < num; i++) {
+            JVMgenUtils::gen_ALOAD(*symTable->getSym(symTable->find("System.out")),tc);
             JVMgenerateExpression::genExpression(write_s->getExpression(i),tc);
+            tc->add(new INVOKEVIRTUAL(PRINT_INT_NEWLINE_METHOD_SPEC));
         }
-        //do something else here?
     } else if (stype == newLineState) {                      //edited ifState 11/25
         //maybe NOP() here?
     }

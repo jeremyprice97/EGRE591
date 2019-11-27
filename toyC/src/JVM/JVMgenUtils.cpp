@@ -41,6 +41,7 @@
 #include "IADD.h"
 #include "IAND.h"
 #include "IOR.h"
+#include "IXOR.h"
 #include "IREM.h"
 #include "ISUB.h"
 #include "IMUL.h"
@@ -128,7 +129,7 @@ namespace toycalc {
   void JVMgenUtils::gen_ADDOP(TCtoken tok, JVMtargetCode *tc) {
     if (tok.getLexeme()=="+")        tc->add(new IADD());
     else if (tok.getLexeme()=="-")   tc->add(new ISUB());
-    else if (tok.getLexeme()=="||")  tc->add(new IOR());                //added this
+    else if (tok.getLexeme()=="||")  gen_OR(tok, tc);                //added this
     else { // shouldn't happen
       std::cerr << "Error: gen_ADDOP: internal error" << std::endl;
       exit(EXIT_FAILURE);
@@ -139,7 +140,7 @@ namespace toycalc {
     if (tok.getLexeme()=="*")        tc->add(new IMUL());
     else if (tok.getLexeme()=="/")   tc->add(new IDIV());
     else if (tok.getLexeme()=="%")   tc->add(new IREM());                //added this
-    else if (tok.getLexeme()=="&&")  tc->add(new IAND());                //added this
+    else if (tok.getLexeme()=="&&")  gen_AND(tok, tc);                //added this
     else { // shouldn't happen
       std::cerr << "Error: gen_MULOP: internal error" << std::endl;
       exit(EXIT_FAILURE);
@@ -196,6 +197,13 @@ namespace toycalc {
     tc->add(new codeLabel(l1->toString()));
     tc->add(new ICONST_1());
     tc->add(new codeLabel(l2->toString()));
+  }
+
+  void JVMgenUtils::gen_NOT(JVMtargetCode *tc) {
+      tc->add(new ICONST_1());
+      tc->add(new IAND());
+      tc->add(new ICONST_1());
+      tc->add(new IXOR());
   }
 
 }
