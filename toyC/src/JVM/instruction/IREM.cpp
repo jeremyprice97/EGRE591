@@ -1,17 +1,17 @@
 #include <iostream>
 #include "JVMinstruction.h"
 #include "JVMlineOfCode.h"
-
+#include "IREM.h"
 namespace toycalc {
 
-  class IREM : public JVMinstruction, JVMlineOfCode {
-  public:
+  //class IREM : public JVMinstruction, JVMlineOfCode {
+  //public:
 
-    IREM() { }
-    std::string toString() {
+    IREM::IREM() { }
+    std::string IREM::toString() {
       return "\tirem";
     }
-  };
+  //};
 
 }
 

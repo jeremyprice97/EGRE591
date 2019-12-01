@@ -1,16 +1,17 @@
 #include <iostream>
 #include "JVMinstruction.h"
 #include "JVMlineOfCode.h"
+#include "IXOR.h"
 
 namespace toycalc {
 
-    class IXOR : public JVMinstruction, JVMlineOfCode {
-    public:
+   // class IXOR : public JVMinstruction, JVMlineOfCode {
+    //public:
 
-        IXOR() { }
-        std::string toString() {
+        IXOR::IXOR() { }
+        std::string IXOR::toString() {
             return "\tixor";
         }
-    };
+    //};
 
 }

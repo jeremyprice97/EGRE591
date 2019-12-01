@@ -1,17 +1,17 @@
 #include <iostream>
 #include "JVMinstruction.h"
 #include "JVMlineOfCode.h"
-
+#include "IAND.h"
 namespace toycalc {
 
-  class IAND : public JVMinstruction, JVMlineOfCode {
-  public:
+ // class IAND : public JVMinstruction, JVMlineOfCode {
+  //public:
 
-    IAND() { }
-    std::string toString() {
+    IAND::IAND() { }
+    std::string IAND::toString() {
       return "\tiand";
     }
-  };
+  //};
 
 }
 
