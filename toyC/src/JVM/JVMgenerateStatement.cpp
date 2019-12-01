@@ -35,6 +35,7 @@
 namespace toycalc {
 
   void JVMgenerateStatement::genStatement(ASstatement *ast,JVMtargetCode *tc) {
+	 // std::cout << "In gen statement\n";
     enum stateType stype = ast->getType();
 	if (stype == exprState) {
         ASexprState *es = dynamic_cast<ASexprState*>(ast);
@@ -75,6 +76,7 @@ namespace toycalc {
         ASstatement *w_state = dynamic_cast<ASstatement*>(ws->getStatement());
         JVMgenerateStatement::genStatement(w_state,tc);
     } else if (stype == readState) {                      //edited ifState 11/25
+		//std::cout << "In gen read state\n";
         /*ASreadState *read_s = dynamic_cast<ASreadState*>(ast);
         int num = read_s->getNumIDs();
         for(int i=0; i < num; i++) {
@@ -84,6 +86,7 @@ namespace toycalc {
         ASreadState *read_s = dynamic_cast<ASreadState*>(ast);
         int num = read_s->getNumIDs();
         // now input value
+		
         for(int i=0; i < num; i++) {
             JVMgenUtils::gen_ALOAD(*symTable->getSym(symTable->find("System.in")),tc);
             tc->add(new INVOKEVIRTUAL(READ_INT_METHOD_SPEC));

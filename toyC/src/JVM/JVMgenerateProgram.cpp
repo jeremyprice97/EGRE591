@@ -69,9 +69,14 @@ namespace toycalc {
     gen_main_header(tc);
     gen_stack_limit_directive(tc);
     gen_locals_limit_directive(tc);
-   // if (thereIsInput(definitions,num)) gen_input_stream_store(tc);
-   // if (thereIsOutput(definitions,num)) gen_output_stream_store(tc);
+	//std::cout << "In gen main method\n";
+    //if (thereIsInput(definitions,num)) 
+		gen_input_stream_store(tc);
+    //if (thereIsOutput(definitions,num))
+		gen_output_stream_store(tc);
+	//std::cout << "In gen main method after i/o stream calls\n";
     for (int i=0; i < num; i++) {
+		//std::cout << "In gen main method for loop" << i << "\n";
       JVMgenerateDefinition::genDefinition(definitions[i],tc);
     }
     tc->add(new RETURN());
@@ -112,7 +117,7 @@ namespace toycalc {
     tc->add(new throws_(IOEXCEPTION));
   }
 
-  /*bool JVMgenerateProgram::thereIsInput(ASexpression** exp, int num) {
+ /* bool JVMgenerateProgram::thereIsInput(ASexpression** exp, int num) {
     for (int i=0; i < num; i++) {
       ASexpression *ex = exp[i];
       if (ex->getType()==READstate) return true;
@@ -141,16 +146,21 @@ namespace toycalc {
   }*/
 
   void JVMgenerateProgram::gen_output_stream_store(JVMtargetCode *tc) {
+	  //std::cout << "In gen output stream\n";
       tc->add(new GETSTATIC(OUTPUT_FIELD_SPEC,OUTPUT_DESCRIPTOR));
+	  //std::cout << "In gen output stream between\n";
       JVMgenUtils::gen_ASTORE(*symTable->getSym(symTable->find("System.out")),tc);
+	  //std::cout << "In gen output stream end\n";
   }
 
   void JVMgenerateProgram::gen_input_stream_store(JVMtargetCode *tc) {
-      tc->add(new NEW(SCANNER));
+     // std::cout << "In gen input stream\n";
+	  tc->add(new NEW(SCANNER));
       tc->add(new DUP());
       tc->add(new GETSTATIC(INPUT_FIELD_SPEC,INPUT_DESCRIPTOR));
       tc->add(new INVOKESPECIAL(SCANNER_CONSTRUCTOR));
       JVMgenUtils::gen_ASTORE(*symTable->getSym(symTable->find("System.in")),tc);
+	  //std::cout << "In gen input stream end\n";
   }
 
   void JVMgenerateProgram::gen_stack_limit_directive(JVMtargetCode *tc){

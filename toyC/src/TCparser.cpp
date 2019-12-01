@@ -86,7 +86,7 @@ namespace toycalc{
 	
 	//static void checkIfAllLabelTargetsAreDefined(ASprogram*);
 	//static bool targetLabelExists(std::string,ASprogram*);
-	
+	static void enter_special_id(TCsymTable*,tokens);
 	TCparser::TCparser(TClexer* s) { scanner = s; }
 	
 	ASabstractSyntax* TCparser::parse() {
@@ -431,6 +431,7 @@ namespace toycalc{
 		int idList[MAX_ID];
 		TCsymbol *sym;
         enteringDEBUG("readStatement");
+		enter_special_id(symTable,READ);
         accept(READ);
         accept(LPAREN);
         if(buff->getTokenType() == ID) {
@@ -472,6 +473,7 @@ namespace toycalc{
 	ASstatement* TCparser::writeStatement(){
 		ASexpression* expressionList[MAX_EXPRESSION];
         enteringDEBUG("writeStatement");
+		enter_special_id(symTable,WRITE);
         accept(WRITE);
         accept(LPAREN);
         int num = actualParameters(expressionList);
@@ -663,4 +665,11 @@ namespace toycalc{
 			exit(EXIT_FAILURE);
 		}
 	}
+	static void enter_special_id(TCsymTable *st,tokens type) {
+    TCsymbol *sym = new TCsymbol();
+    sym->setType(VAR);
+    sym->setId((type==READ)?"System.in":"System.out");
+    sym->setOffset(TCsymbol::getNextOffset());
+    st->add(sym);
+  }
 }

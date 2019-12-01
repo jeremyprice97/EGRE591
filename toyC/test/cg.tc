@@ -1,0 +1,22 @@
+int main() {
+	int x;
+	//write("Welcome to this TC program\n");
+	//write("Please enter a value for x: ");
+	read(x);
+	if (x < 0) {
+		//write(-1);
+		}
+	else if (x > 0) {
+		write(1);
+		}
+	else {
+		write(0);
+		}
+	x = -(3+4);
+	if (x != 7) {
+		write(x);
+		}
+	else {
+		write(x+1);
+	}
+}

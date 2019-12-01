@@ -22,6 +22,7 @@
 namespace toycalc {
 
   void JVMgenerateDefinition::genDefinition(ASdefinition *ast,JVMtargetCode *tc) {
+	  //std::cout << "In gen read def\n";
     enum defType dtype = ast->getType();
 	if(dtype==funcDef) {
 		ASfuncDef *fd = dynamic_cast<ASfuncDef*>(ast);
