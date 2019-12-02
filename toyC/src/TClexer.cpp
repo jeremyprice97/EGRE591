@@ -293,6 +293,7 @@ namespace toycalc {
           blockCommentCount++;
           pos++;
           while(!((ch == '*') && (line[pos+1] == '/')) || blockCommentCount>1) {
+			  //std::cout << blockCommentCount << std::endl;
               if((ch == '/') && (line[pos+1] == '*')) {
                   blockCommentCount++;
               }

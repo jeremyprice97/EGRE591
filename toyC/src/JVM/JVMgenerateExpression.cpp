@@ -72,9 +72,26 @@ namespace toycalc {
               case ASSIGNOP: {
 				  t = 1;
 				  genExpression(e->getOp2(), tc);
-                  ASsimpleExpr *exp1 = dynamic_cast<ASsimpleExpr *>(e->getOp1());
-                  TCtoken *tok1 = exp1->getExpr();
-                  JVMgenUtils::gen_ISTORE(*symTable->getSym(tok1), tc);
+				  ASexpression *op2_e = dynamic_cast<ASexpression*>(e->getOp2());
+				  if ((op2_e->getType() != simpleExpr)) {
+					ASexpr *op2_e_expr = dynamic_cast<ASexpr *>(e->getOp2());  
+					genExpression(op2_e_expr->getOp1(), tc);
+				  }
+				  else {
+					//std::cout << "CODE GEN - ERROR, assign target not a variable" << std::endl;
+				  }
+				  ASexpression *op1_e = dynamic_cast<ASexpression*>(e->getOp1());	  
+				  
+				 if (op1_e->getType() == simpleExpr) {
+					ASsimpleExpr *exp1 = dynamic_cast<ASsimpleExpr *>(e->getOp1());
+					TCtoken *tok1 = exp1->getExpr();
+					JVMgenUtils::gen_ISTORE(*symTable->getSym(tok1), tc);
+				  }
+				  else {
+					  
+					genExpression(e->getOp1(), tc);
+					
+				  } 
                   } break;
               default: // shouldn't happen
                   std::cerr << "Fatal internal error #1: JVMgenerateExpression" << std::endl;
