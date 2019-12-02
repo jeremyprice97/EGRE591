@@ -136,7 +136,8 @@ namespace toycalc{
 				if(stype == NO_TYPE) {
 					symTable->getSym(loc)->setType(FUNC);
 				} else if (stype == VAR) {
-					//reportSEMANTIC_ERROR(scanner, "function name expected");
+					reportSEMANTIC_ERROR(scanner, "function name expected");
+					exit(EXIT_FAILURE);
 				}
 				
                 d = functionDefinition(loc, t);
@@ -146,7 +147,8 @@ namespace toycalc{
 					sym->setOffset(TCsymbol::getNextOffset());
 				}	
 				else if (stype == FUNC) {
-					//reportSEMANTIC_ERROR(scanner, "variable name expected");
+					reportSEMANTIC_ERROR(scanner, "variable name expected");
+					exit(EXIT_FAILURE);
 				}
                 accept(SEMICOLON);
 				d = new ASvarDef(loc, t);
@@ -229,7 +231,8 @@ namespace toycalc{
 				symTable->getSym(loc)->setType(VAR);
 				sym->setOffset(TCsymbol::getNextOffset());
 			} else if (stype == FUNC) {
-				//reportSEMANTIC_ERROR(scanner, "var name expected");
+				reportSEMANTIC_ERROR(scanner, "Redefinition of function name "+buff->getLexeme());
+				exit(EXIT_FAILURE);
 			}
             buff = scanner->getToken();
         } else {
@@ -252,7 +255,8 @@ namespace toycalc{
 					symTable->getSym(loc)->setType(VAR);
 					sym->setOffset(TCsymbol::getNextOffset());
 				} else if (stype == FUNC) {
-					//reportSEMANTIC_ERROR(scanner, "var name expected");
+					reportSEMANTIC_ERROR(scanner, "Redefinition of function name "+buff->getLexeme());
+					exit(EXIT_FAILURE);
 				}
 				buff = scanner->getToken();
             } else {
@@ -349,7 +353,8 @@ namespace toycalc{
 					symTable->getSym(loc)->setType(VAR);
 					sym->setOffset(TCsymbol::getNextOffset());
 				} else if (stype == FUNC) {
-					//reportSEMANTIC_ERROR(scanner, "var name expected");
+					reportSEMANTIC_ERROR(scanner, "Redefinition of function name "+buff->getLexeme());
+					exit(EXIT_FAILURE);
 				}
 				buff = scanner->getToken();
                 accept(SEMICOLON);
@@ -439,12 +444,12 @@ namespace toycalc{
 			sym = symTable->getSym(buff);
 			loc = symTable->find(buff->getLexeme());
 			if ( (sym->getType() == NO_TYPE) || (loc == -1)) {
-				//reportSEMANTIC_ERROR(scanner,"uninitialized variable");
-				//exit(EXIT_FAILURE);
+				reportSEMANTIC_ERROR(scanner,"uninitialized variable");
+				exit(EXIT_FAILURE);
 			}
 			if ( sym->getType() == FUNC ) {
-				//reportSEMANTIC_ERROR(scanner,"'"+sym->getId()+"' is a function");
-				//exit(EXIT_FAILURE);
+				reportSEMANTIC_ERROR(scanner,"'"+sym->getId()+"' is a function");
+				exit(EXIT_FAILURE);
 			}
 			idList[numID] = loc;
 			++numID;
@@ -457,8 +462,8 @@ namespace toycalc{
 					sym = symTable->getSym(buff);
 			loc = symTable->find(buff->getLexeme());
 			if ( (sym->getType() == NO_TYPE) || (loc == -1)) {
-				//reportSEMANTIC_ERROR(scanner,"uninitialized variable");
-				//exit(EXIT_FAILURE);
+				reportSEMANTIC_ERROR(scanner,"uninitialized variable");
+				exit(EXIT_FAILURE);
 			}
 				idList[numID] = loc;
 				++numID;
@@ -554,6 +559,16 @@ namespace toycalc{
 			t = buff;
             buff = scanner->getToken();
 			e2 = primary();
+			
+			if (e2->getType() == simpleExpr) {
+				ASsimpleExpr* s_e2 = (ASsimpleExpr*)e2;
+				if (s_e2->getExpr()->getTokenType() == NUMBER) {
+					if(s_e2->getExpr()->getLexeme() == "0") {
+						reportSEMANTIC_ERROR(scanner, "divide by 0");
+						exit(EXIT_FAILURE);
+					}
+				}
+			}
             e1 = new ASexpr(t, e1, e2);
         }
         exitingDEBUG("term");
@@ -573,8 +588,8 @@ namespace toycalc{
 			sym = symTable->getSym(buff);
 			loc = symTable->find(buff->getLexeme());
 			if ( (sym->getType() == NO_TYPE) || (loc == -1)) {
-				//reportSEMANTIC_ERROR(scanner,"uninitialized variable or function");
-				//exit(EXIT_FAILURE);
+				reportSEMANTIC_ERROR(scanner,"uninitialized variable or function");
+				exit(EXIT_FAILURE);
 			}
 			t = buff;
 			

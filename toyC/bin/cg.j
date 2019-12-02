@@ -1,7 +1,7 @@
 ;
 ; Source file: /mnt/c/school/fall19/egre591/proj/jasmin-2.4/cg.tc
 ; Target file: cg.j
-; Sun Dec  1 23:13:20 2019
+; Sun Dec  1 23:43:26 2019
 ;
 
 .source /mnt/c/school/fall19/egre591/proj/jasmin-2.4/cg.tc
@@ -32,33 +32,5 @@
 	aload_3
 	invokevirtual java/util/Scanner/nextInt()I
 	istore_1
-_label0:
-	iload_1
-	iconst_0
-	if_icmpeq _label2
-	iconst_1
-	goto _label3
-_label2:
-	iconst_0
-_label3:
-	iconst_0
-	if_icmpeq _label1
-	aload_2
-	ldc "x = "
-	invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
-	aload_2
-	iload_1
-	invokevirtual java/io/PrintStream/println(I)V
-	aload_2
-	ldc "\n"
-	invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
-	iload_1
-	iload_1
-	iconst_1
-	isub
-	istore_1
-	pop
-	goto _label0
-_label1:
 	return
 .end method
