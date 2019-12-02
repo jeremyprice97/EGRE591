@@ -61,10 +61,6 @@
 #include "label.h"
 #include "codeLabel.h"
 
-//todo: fix gen_relop -> couldn't find anything to fix
-// gen_mulop -> added %, &&
-// gen_addop -> added ||
-
 namespace toycalc {
 
   void JVMgenUtils::gen_ISTORE(TCsymbol id,JVMtargetCode *tc){
@@ -129,7 +125,7 @@ namespace toycalc {
   void JVMgenUtils::gen_ADDOP(TCtoken tok, JVMtargetCode *tc) {
     if (tok.getLexeme()=="+")        tc->add(new IADD());
     else if (tok.getLexeme()=="-")   tc->add(new ISUB());
-    else if (tok.getLexeme()=="||")  gen_OR(tok, tc);                //added this
+    else if (tok.getLexeme()=="||")  gen_OR(tok, tc);
     else { // shouldn't happen
       std::cerr << "Error: gen_ADDOP: internal error" << std::endl;
       exit(EXIT_FAILURE);
@@ -139,8 +135,8 @@ namespace toycalc {
   void JVMgenUtils::gen_MULOP(TCtoken tok, JVMtargetCode *tc) {
     if (tok.getLexeme()=="*")        tc->add(new IMUL());
     else if (tok.getLexeme()=="/")   tc->add(new IDIV());
-    else if (tok.getLexeme()=="%")   tc->add(new IREM());                //added this
-    else if (tok.getLexeme()=="&&")  gen_AND(tok, tc);                //added this
+    else if (tok.getLexeme()=="%")   tc->add(new IREM());
+    else if (tok.getLexeme()=="&&")  gen_AND(tok, tc);
     else { // shouldn't happen
       std::cerr << "Error: gen_MULOP: internal error" << std::endl;
       exit(EXIT_FAILURE);

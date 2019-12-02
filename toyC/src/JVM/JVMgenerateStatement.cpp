@@ -73,7 +73,7 @@ namespace toycalc {
 		tc->add(new codeLabel(l1->toString()+""));
 		if(if_s->getStatement2() != NULL) {
 			tc->add(new ICONST_1());
-			label *l2 = new label(); //label *l4 = new label();
+			label *l2 = new label();
 			tc->add(new IF_ICMPEQ(l2));
             ASstatement *if_state2 = dynamic_cast<ASstatement *>(if_s->getStatement2());
             JVMgenerateStatement::genStatement(if_state2,tc);

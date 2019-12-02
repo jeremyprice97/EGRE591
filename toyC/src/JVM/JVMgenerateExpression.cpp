@@ -19,7 +19,6 @@
 #include "LDC.h"
 
 //todo: finish funcCall -> added some code, some questions about the logic and how to go about it
-//todo: maybe fix assignop
 
 namespace toycalc {
   int JVMgenerateExpression::genExpression(ASexpression *ast,JVMtargetCode *tc) {
@@ -82,7 +81,7 @@ namespace toycalc {
 				  }
 				  ASexpression *op1_e = dynamic_cast<ASexpression*>(e->getOp1());	  
 				  
-				 if (op1_e->getType() == simpleExpr) {
+				  if (op1_e->getType() == simpleExpr) {
 					ASsimpleExpr *exp1 = dynamic_cast<ASsimpleExpr *>(e->getOp1());
 					TCtoken *tok1 = exp1->getExpr();
 					JVMgenUtils::gen_ISTORE(*symTable->getSym(tok1), tc);
@@ -98,13 +97,13 @@ namespace toycalc {
                   exit(EXIT_FAILURE);
           }
 		  return t;
-      } else if (etype == minus) {                      //edited ifState 11/25
+      } else if (etype == minus){
           ASminus *minus_s = dynamic_cast<ASminus*>(ast);
           ASexpression *min_expr = dynamic_cast<ASexpression*>(minus_s->getExpression());
           int t = genExpression(min_expr,tc);
           tc->add(new INEG());
 		  return t;
-      } else if (etype == NoT) {                      //edited ifState 11/25
+      } else if (etype == NoT) {
           ASnot *not_s = dynamic_cast<ASnot*>(ast);
           ASexpression *not_expr = dynamic_cast<ASexpression*>(not_s->getExpression());
          int t =  JVMgenerateExpression::genExpression(not_expr,tc);

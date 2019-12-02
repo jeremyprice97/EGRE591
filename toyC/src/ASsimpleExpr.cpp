@@ -19,7 +19,6 @@ namespace toycalc {
             "error"
             );
     return ("s_expr("+ str + ")");
-    ///where does VAR come from
     }
 
     TCtoken* ASsimpleExpr::getExpr() { return expr; }

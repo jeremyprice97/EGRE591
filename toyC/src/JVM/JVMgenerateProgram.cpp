@@ -69,8 +69,7 @@ namespace toycalc {
     gen_main_header(tc);
     gen_stack_limit_directive(tc);
     gen_locals_limit_directive(tc);
-	//std::cout << "In gen main method\n";
-    if (is_input) 
+    if (is_input)
 		gen_input_stream_store(tc);
     if (is_output)
 		gen_output_stream_store(tc);

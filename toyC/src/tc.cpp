@@ -32,12 +32,8 @@ int main(int argc, char *argv[]) {
         //int tok;                                    //scanner only
 		ASabstractSyntax* p = NULL;                 //parser only
         //    turnVerboseOn();
-		//cout << "111111111111111111111111111111111111111111111111111\n";
         p = parser->parse();                      //parser only
-        //cout << "222222222222222222222222222222222222222222222222222\n";
         if(verbose) cout << p->toString();                    //parser only
-        //cout << endl;
-        //cout << "333333333333333333333333333333333333333333333333333\n";
         CGcodeGenerator *cg = new JVMcodeGenerator();
         CGtargetCode* tc = cg->generateCode(p);
         if(verbose) tc->writeCode(tc,targetFileName);
