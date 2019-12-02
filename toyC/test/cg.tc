@@ -1,7 +1,7 @@
 int main() {
 	int x;
 	//write("Welcome to this TC program\n");
-	//write("Please enter a value for x: ");
+	write("Please enter a value for x: ");
 	read(x);
 	if (x < 0) {
 		//write(-1);

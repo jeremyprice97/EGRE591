@@ -18,6 +18,7 @@
 #include "TCglobals.h"
 
 #include "INEG.h"
+#include "LDC.h"
 
 //todo: finish funcCall -> added some code, some questions about the logic and how to go about it
 // minus -> added code
@@ -25,7 +26,7 @@
 //todo: maybe fix assignop
 
 namespace toycalc {
-  void JVMgenerateExpression::genExpression(ASexpression *ast,JVMtargetCode *tc) {
+  int JVMgenerateExpression::genExpression(ASexpression *ast,JVMtargetCode *tc) {
       enum exprType etype = ast->getType();
       if (etype == simpleExpr) {
           ASsimpleExpr *se = dynamic_cast<ASsimpleExpr *>(ast);
@@ -36,7 +37,13 @@ namespace toycalc {
               JVMgenUtils::gen_ILOAD(*idsym, tc);
           } else if (t->getTokenType() == NUMBER) {
               JVMgenUtils::gen_ICONST(stoi(lexeme), tc);
-          }
+			 
+          } else if (t->getTokenType() == STRING) {
+			  tc->add(new LDC(t->getLexeme()));
+			  //tc->add("\"");
+			  //tc->add(
+		  }
+		  return t->getTokenType();
       } else if (etype == funcCall) {                      //edited ifState 11/25
           /*ASfuncCall *call_s = dynamic_cast<ASfuncCall*>(ast);
           //ASsimpleExpr *simp_expr = dynamic_cast<ASsimpleExpr*>(call_s->getID());     //todo: is it this line and the next line?
@@ -50,7 +57,7 @@ namespace toycalc {
           }*/
       } else if (etype == expr) {
           ASexpr *e = dynamic_cast<ASexpr *>(ast);
-          genExpression(e->getOp1(), tc);
+          int t = genExpression(e->getOp1(), tc);
           genExpression(e->getOp2(), tc);
           TCtoken *op = e->getOper();
           switch (op->getTokenType()) {
@@ -72,17 +79,20 @@ namespace toycalc {
                   std::cerr << "Fatal internal error #1: JVMgenerateExpression" << std::endl;
                   exit(EXIT_FAILURE);
           }
+		  return t;
       } else if (etype == minus) {                      //edited ifState 11/25
           ASminus *minus_s = dynamic_cast<ASminus*>(ast);
           ASexpression *min_expr = dynamic_cast<ASexpression*>(minus_s->getExpression());
           //ASexpression *zero = new ASexpression(0,'-',minus_s->getExpression());
-          genExpression(min_expr,tc);
+          int t = genExpression(min_expr,tc);
           tc->add(new INEG());
+		  return t;
       } else if (etype == NoT) {                      //edited ifState 11/25
           ASnot *not_s = dynamic_cast<ASnot*>(ast);
           ASexpression *not_expr = dynamic_cast<ASexpression*>(not_s->getExpression());
-          JVMgenerateExpression::genExpression(not_expr,tc);
+         int t =  JVMgenerateExpression::genExpression(not_expr,tc);
           JVMgenUtils::gen_NOT(tc);
+		  return t;
       }
 
   }

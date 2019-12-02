@@ -8,7 +8,7 @@ namespace toycalc {
 
   class JVMgenerateExpression {
   public:
-    static void genExpression(ASexpression*,JVMtargetCode*);
+    static int genExpression(ASexpression*,JVMtargetCode*);
   };
 
 }

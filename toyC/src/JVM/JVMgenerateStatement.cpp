@@ -19,6 +19,10 @@
 #include "JVMgenUtils.h"
 #include "JVMgenGlobals.h"
 
+//#include "TCtoken.h"
+//#include "TCtokens.h"
+//#include "TCglobals.h"
+
 #include "codeLabel.h"
 
 #include "GOTO.h"
@@ -97,8 +101,14 @@ namespace toycalc {
         int num = write_s->getNumExpressions();
         for(int i=0; i < num; i++) {
             JVMgenUtils::gen_ALOAD(*symTable->getSym(symTable->find("System.out")),tc);
-            JVMgenerateExpression::genExpression(write_s->getExpression(i),tc);
-            tc->add(new INVOKEVIRTUAL(PRINT_INT_NEWLINE_METHOD_SPEC));
+			
+            int t = JVMgenerateExpression::genExpression(write_s->getExpression(i),tc);
+			if(t == 10) { //string enum type, clashes with JVM instruction return if included here
+				tc->add(new INVOKEVIRTUAL(PRINT_STRING_METHOD_SPEC));
+			}
+			else {
+				tc->add(new INVOKEVIRTUAL(PRINT_INT_NEWLINE_METHOD_SPEC));
+			}
         }
     } else if (stype == newLineState) {                      //edited ifState 11/25
         //maybe NOP() here?
