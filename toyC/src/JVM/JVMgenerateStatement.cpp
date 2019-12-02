@@ -36,7 +36,9 @@
 #include "INVOKESPECIAL.h"
 #include "INVOKEVIRTUAL.h"
 #include "LDC.h"
-
+#include "IFNE.h"
+#include "IFEQ.h"
+#include "DUP.h"
 //todo: finish rest of statements
 // filled in all but breakState
 
@@ -91,11 +93,21 @@ namespace toycalc {
 	    }
 	    tc->add(new RETURN());
     } else if (stype == whileState) {                      //edited ifState 11/25
+		label *l0 = new label(); label *l1 = new label();
         ASwhileState *ws = dynamic_cast<ASwhileState*>(ast);
         ASexpression *w_expr = dynamic_cast<ASexpression*>(ws->getExpression());
+		ASstatement *w_state = dynamic_cast<ASstatement*>(ws->getStatement());	
+		
+		tc->add(new codeLabel(l0->toString()+""));
         JVMgenerateExpression::genExpression(w_expr,tc);
-        ASstatement *w_state = dynamic_cast<ASstatement*>(ws->getStatement());
-        JVMgenerateStatement::genStatement(w_state,tc);
+		tc->add(new ICONST_0());
+		tc->add(new IF_ICMPEQ(l1));
+		
+		JVMgenerateStatement::genStatement(w_state,tc);
+		tc->add(new POP());
+		tc->add(new GOTO(l0));
+		tc->add(new codeLabel(l1->toString()+""));
+		
     } else if (stype == readState) {                      //edited ifState 11/25
 		//std::cout << "In gen read state\n";
         /*ASreadState *read_s = dynamic_cast<ASreadState*>(ast);

@@ -3,14 +3,19 @@ int main() {
 	//write("Welcome to this TC program");
 	write("Please enter a value for x: ");
 	read(x);
-	if (x > 0) {
+	/*if (x > 0) {
 		write("X is positive");
 		newline;
 		}
 	else if (x < 0) {
 		write("X is negative");
 		newline;
-		}
+		}*/
+	while (x != 0) {
+		//write("x = ", x);
+		//newline;
+		//x = x - 1;
+	}
 	/*else {
 		write("X is 0");
 		newline;

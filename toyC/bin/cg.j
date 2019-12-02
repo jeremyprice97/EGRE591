@@ -1,10 +1,10 @@
 ;
-; Source file: ../test/cg.tc
+; Source file: /mnt/c/school/fall19/egre591/proj/jasmin-2.4/cg.tc
 ; Target file: cg.j
-; Sun Dec  1 21:41:58 2019
+; Sun Dec  1 23:13:20 2019
 ;
 
-.source ../test/cg.tc
+.source /mnt/c/school/fall19/egre591/proj/jasmin-2.4/cg.tc
 .class public cg
 .super java/lang/Object
 
@@ -32,51 +32,33 @@
 	aload_3
 	invokevirtual java/util/Scanner/nextInt()I
 	istore_1
+_label0:
 	iload_1
 	iconst_0
-	if_icmple _label0
-	iconst_1
-	goto _label1
-_label0:
-	iconst_0
-_label1:
-	iconst_0
 	if_icmpeq _label2
-	aload_2
-	ldc "X is positive"
-	invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
-	aload_2
-	ldc "\n"
-	invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
 	iconst_1
 	goto _label3
 _label2:
 	iconst_0
 _label3:
-	iconst_1
-	if_icmpeq _label4
-	iload_1
 	iconst_0
-	if_icmpge _label5
-	iconst_1
-	goto _label6
-_label5:
-	iconst_0
-_label6:
-	iconst_0
-	if_icmpeq _label7
+	if_icmpeq _label1
 	aload_2
-	ldc "X is negative"
+	ldc "x = "
 	invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+	aload_2
+	iload_1
+	invokevirtual java/io/PrintStream/println(I)V
 	aload_2
 	ldc "\n"
 	invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+	iload_1
+	iload_1
 	iconst_1
-	goto _label8
-_label7:
-	iconst_0
-_label8:
+	isub
+	istore_1
 	pop
-_label4:
+	goto _label0
+_label1:
 	return
 .end method
