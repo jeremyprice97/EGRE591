@@ -5,8 +5,6 @@
 
 #include "ASexpression.h"
 #include "ASexpr.h"
-//#include "ASbinaryExpr.h"
-//#include "ASunaryExpr.h"
 #include "ASsimpleExpr.h"
 #include "ASfuncCall.h"
 #include "ASminus.h"
@@ -21,8 +19,6 @@
 #include "LDC.h"
 
 //todo: finish funcCall -> added some code, some questions about the logic and how to go about it
-// minus -> added code
-// NoT -> added code
 //todo: maybe fix assignop
 
 namespace toycalc {
@@ -40,15 +36,13 @@ namespace toycalc {
 			 
           } else if (t->getTokenType() == STRING) {
 			  tc->add(new LDC(t->getLexeme()));
-			  //tc->add("\"");
-			  //tc->add(
 		  }
 		  return t->getTokenType();
-      } else if (etype == funcCall) {                      //edited ifState 11/25
+      } else if (etype == funcCall) {
           /*ASfuncCall *call_s = dynamic_cast<ASfuncCall*>(ast);
-          //ASsimpleExpr *simp_expr = dynamic_cast<ASsimpleExpr*>(call_s->getID());     //todo: is it this line and the next line?
-          //JVMgenerateExpression::genExpression(simp_expr,tc);                       //
-          genExpression(call_s->getID(),tc);      //todo: must uncomment, only commented out to compile!!!!!             // or just this one? or does it matter?
+          //ASsimpleExpr *simp_expr = dynamic_cast<ASsimpleExpr*>(call_s->getID());
+          //JVMgenerateExpression::genExpression(simp_expr,tc);
+          genExpression(call_s->getID(),tc);
           int num = call_s->getNumExpressions();
           for(int i=0; i < num; i++) {
               //ASexpression *func_expr = dynamic_cast<ASexpression *>(call_s->getExpression());
@@ -58,8 +52,6 @@ namespace toycalc {
       } else if (etype == expr) {
 		  int t = 0;
           ASexpr *e = dynamic_cast<ASexpr *>(ast);
-          //int t = genExpression(e->getOp1(), tc);
-          //genExpression(e->getOp2(), tc);
           TCtoken *op = e->getOper();
           switch (op->getTokenType()) {
               case ADDOP:
@@ -92,7 +84,6 @@ namespace toycalc {
       } else if (etype == minus) {                      //edited ifState 11/25
           ASminus *minus_s = dynamic_cast<ASminus*>(ast);
           ASexpression *min_expr = dynamic_cast<ASexpression*>(minus_s->getExpression());
-          //ASexpression *zero = new ASexpression(0,'-',minus_s->getExpression());
           int t = genExpression(min_expr,tc);
           tc->add(new INEG());
 		  return t;
@@ -103,6 +94,5 @@ namespace toycalc {
           JVMgenUtils::gen_NOT(tc);
 		  return t;
       }
-
   }
 }

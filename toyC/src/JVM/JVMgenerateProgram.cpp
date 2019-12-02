@@ -34,7 +34,6 @@
 #include "RETURN.h"
 
 //todo: fix gen_stack_limit_directive(tc) AND gen_locals_limit_directive(tc);
-//todo: fix thereIsInput() AND thereIsOutput()
 
 namespace toycalc {
 
@@ -75,9 +74,7 @@ namespace toycalc {
 		gen_input_stream_store(tc);
     if (is_output)
 		gen_output_stream_store(tc);
-	//std::cout << "In gen main method after i/o stream calls\n";
     for (int i=0; i < num; i++) {
-		//std::cout << "In gen main method for loop" << i << "\n";
       JVMgenerateDefinition::genDefinition(definitions[i],tc);
     }
     tc->add(new RETURN());
@@ -118,51 +115,17 @@ namespace toycalc {
     tc->add(new throws_(IOEXCEPTION));
   }
 
- /* bool JVMgenerateProgram::thereIsInput(ASdefinition** defs, int num) {
-    for (int i=0; i < num; i++) {
-      ASdefinition *def = defs[i];
-	  for(in
-      if (ex->getType()==READstate) return true;
-      else
-       while (ex->getType()==LABELstate) {
-          ASlabelState *ls = dynamic_cast<ASlabelState*>(ex);
-          ex = ls->getStatement();
-          if(stmnt->getType()==READstate) return true;
-       }
-     }
-     return false;
-  }
-  
-  bool JVMgenerateProgram::thereIsOutput(ASstatement** s,int num) {
-    for (int i=0; i < num; i++){
-      ASstatement *stmnt = s[i];
-      if (stmnt->getType()==WRITEstate) return true;
-      else
-        while (stmnt->getType()==LABELstate) {
-          ASlabelState *ls = dynamic_cast<ASlabelState*>(stmnt);
-          stmnt = ls->getStatement();
-          if(stmnt->getType()==WRITEstate) return true;
-        }
-    }
-    return false;
-  }*/
-
   void JVMgenerateProgram::gen_output_stream_store(JVMtargetCode *tc) {
-	  //std::cout << "In gen output stream\n";
       tc->add(new GETSTATIC(OUTPUT_FIELD_SPEC,OUTPUT_DESCRIPTOR));
-	  //std::cout << "In gen output stream between\n";
       JVMgenUtils::gen_ASTORE(*symTable->getSym(symTable->find("System.out")),tc);
-	  //std::cout << "In gen output stream end\n";
   }
 
   void JVMgenerateProgram::gen_input_stream_store(JVMtargetCode *tc) {
-     // std::cout << "In gen input stream\n";
 	  tc->add(new NEW(SCANNER));
       tc->add(new DUP());
       tc->add(new GETSTATIC(INPUT_FIELD_SPEC,INPUT_DESCRIPTOR));
       tc->add(new INVOKESPECIAL(SCANNER_CONSTRUCTOR));
       JVMgenUtils::gen_ASTORE(*symTable->getSym(symTable->find("System.in")),tc);
-	  //std::cout << "In gen input stream end\n";
   }
 
   void JVMgenerateProgram::gen_stack_limit_directive(JVMtargetCode *tc){

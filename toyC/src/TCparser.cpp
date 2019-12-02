@@ -559,7 +559,7 @@ namespace toycalc{
 				ASsimpleExpr* s_e2 = (ASsimpleExpr*)e2;
 				if (s_e2->getExpr()->getTokenType() == NUMBER) {
 					if(s_e2->getExpr()->getLexeme() == "0") {
-						reportSEMANTIC_ERROR(scanner, "divide by 0");
+						reportSEMANTIC_ERROR(scanner, "divide by 0 undefined");
 						exit(EXIT_FAILURE);
 					}
 				}

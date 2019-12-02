@@ -188,23 +188,7 @@ namespace toycalc {
 						  break;
 					  }					  
 			case '/': t = new TCtoken(MULOP,"/"); charBuff = getChar();	break;		/*this case modified my Matthew and Jeremy*/
-					  /*if (charBuff == '*') {
-						  do {
-							charBuff = getChar();
-							if (charBuff == '*') {
-								do {
-									charBuff = getChar();
-								} while(charBuff == '*');
-								
-								if (charBuff == '/') {
-									charBuff = getChar();
-									break;
-								}
-							}
-						  } while(charBuff != EOFCHAR);
-					  } else
-                          t = new TCtoken(MULOP,"/");
-                      break;*/
+
 			case '\'': charBuff = getChar();									/*this case added my Matthew and Jeremy*/
 					  if (charBuff == '\n') {
 						  reportWARNING("","char state 1: illegal character "+lexeme+" ignored 1");
@@ -288,7 +272,7 @@ namespace toycalc {
   
   std::string TClexer::getLine() { return line; }
   std::string TClexer::getLexeme() { return lexeme; }
-  int TClexer::getPos() { return pos; }
+  int TClexer::getPos() { return pos + 1; }
   int TClexer::getLineNum() { return lineNum; }
 
   char getChar() {

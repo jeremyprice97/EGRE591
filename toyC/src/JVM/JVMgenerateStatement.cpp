@@ -39,13 +39,11 @@
 #include "IFNE.h"
 #include "IFEQ.h"
 #include "DUP.h"
-//todo: finish rest of statements
-// filled in all but breakState
+
 
 namespace toycalc {
 
   void JVMgenerateStatement::genStatement(ASstatement *ast,JVMtargetCode *tc) {
-	 // std::cout << "In gen statement\n";
     enum stateType stype = ast->getType();
 	if (stype == exprState) {
         ASexprState *es = dynamic_cast<ASexprState*>(ast);
@@ -59,7 +57,7 @@ namespace toycalc {
         for(int i=0; i < num; i++) {
             JVMgenerateStatement::genStatement(bs->getStatement(i),tc);
         }
-    } else if (stype == ifState) {                      //edited ifState 11/25
+    } else if (stype == ifState) {
         ASifState *if_s = dynamic_cast<ASifState*>(ast);
         ASexpression *if_expr = dynamic_cast<ASexpression*>(if_s->getExpression());
         JVMgenerateExpression::genExpression(if_expr,tc);
@@ -82,17 +80,16 @@ namespace toycalc {
 			tc->add(new codeLabel(l2->toString()+""));
         }
 		else tc->add(new POP());
-    } else if (stype == nullState) {                      //edited ifState 11/25
-        //ASnullState *ns = dynamic_cast<ASnullState*>(ast);
+    } else if (stype == nullState) {
         tc->add(new ICONST_0());
-    } else if (stype == returnState) {                      //edited ifState 11/25
+    } else if (stype == returnState) {
 	    ASreturnState *rs = dynamic_cast<ASreturnState*>(ast);
 	    if(rs->getExpression() != NULL){
             ASexpression *r_expr = dynamic_cast<ASexpression*>(rs->getExpression());
             JVMgenerateExpression::genExpression(r_expr,tc);
 	    }
 	    tc->add(new RETURN());
-    } else if (stype == whileState) {                      //edited ifState 11/25
+    } else if (stype == whileState) {
 		label *l0 = new label(); label *l1 = new label();
         ASwhileState *ws = dynamic_cast<ASwhileState*>(ast);
         ASexpression *w_expr = dynamic_cast<ASexpression*>(ws->getExpression());
@@ -104,18 +101,10 @@ namespace toycalc {
 		tc->add(new IF_ICMPEQ(l1));
 		
 		JVMgenerateStatement::genStatement(w_state,tc);
-		//tc->add(new POP());
 		tc->add(new GOTO(l0));
 		tc->add(new codeLabel(l1->toString()+""));
 		
-    } else if (stype == readState) {                      //edited ifState 11/25
-		//std::cout << "In gen read state\n";
-        /*ASreadState *read_s = dynamic_cast<ASreadState*>(ast);
-        int num = read_s->getNumIDs();
-        for(int i=0; i < num; i++) {
-            JVMgenerateExpression::genExpression(read_s->getID(i),tc);     //todo: must uncomment, only commented out to compile!!!!!
-        }
-        //do something else here?*/
+    } else if (stype == readState) {
         ASreadState *read_s = dynamic_cast<ASreadState*>(ast);
         int num = read_s->getNumIDs();
         // now input value
@@ -125,7 +114,7 @@ namespace toycalc {
             tc->add(new INVOKEVIRTUAL(READ_INT_METHOD_SPEC));
             JVMgenUtils::gen_ISTORE(*symTable->getSym(read_s->getID(i)), tc);
         }
-    } else if (stype == writeState) {                      //edited ifState 11/25
+    } else if (stype == writeState) {
         ASwriteState *write_s = dynamic_cast<ASwriteState*>(ast);
         int num = write_s->getNumExpressions();
         for(int i=0; i < num; i++) {
@@ -139,58 +128,10 @@ namespace toycalc {
 				tc->add(new INVOKEVIRTUAL(PRINT_INT_NEWLINE_METHOD_SPEC));
 			}
         }
-    } else if (stype == newLineState) {                      //edited ifState 11/25
+    } else if (stype == newLineState) {
 		JVMgenUtils::gen_ALOAD(*symTable->getSym(symTable->find("System.out")),tc);
         tc->add(new LDC("\"\\n\""));
 		tc->add(new INVOKEVIRTUAL(PRINT_STRING_METHOD_SPEC));
     }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-    /*if (stype==ASSIGNstate){
-      ASassignState *as = dynamic_cast<ASassignState*>(ast);
-      ASexpr *expr = as->getExpression();
-      JVMgenerateExpression::genExpression(expr,tc);
-      JVMgenUtils::gen_ISTORE(*symTable->getSym(as->getVar()),tc);
-    } else if (stype==WRITEstate) {
-      ASwriteState *ws = dynamic_cast<ASwriteState*>(ast);
-      ASsimpleExpr *sexpr = dynamic_cast<ASsimpleExpr*>(ws->getExpression());
-      JVMgenUtils::gen_ALOAD(*symTable->getSym(symTable->find("System.out")),tc);
-      JVMgenerateExpression::genExpression(sexpr,tc);
-      tc->add(new INVOKEVIRTUAL(PRINT_INT_NEWLINE_METHOD_SPEC));
-    } else if (stype==READstate) {
-      ASreadState *rs = dynamic_cast<ASreadState*>(ast);
-      // prompt first
-      JVMgenUtils::gen_ALOAD(*symTable->getSym(symTable->find("System.out")),tc);
-      tc->add(new LDC("input: "));
-      tc->add(new INVOKEVIRTUAL(PRINT_STRING_METHOD_SPEC));
-      // now input value
-      JVMgenUtils::gen_ALOAD(*symTable->getSym(symTable->find("System.in")),tc);
-      tc->add(new INVOKEVIRTUAL(READ_INT_METHOD_SPEC));
-      JVMgenUtils::gen_ISTORE(*symTable->getSym(rs->getId()),tc);
-    } else if (stype==IFstate) {
-      ASifState *is = dynamic_cast<ASifState*>(ast);
-      JVMgenerateExpression::genExpression(is->getExpression(),tc);
-      tc->add(new IFNE(new label(symTable->getSym(is->getLabel())->getId())));
-    } else if (stype==GOTOstate) {
-      ASgotoState *gs = dynamic_cast<ASgotoState*>(ast);
-      tc->add(new GOTO(new label(symTable->getSym(gs->getLabel())->getId())));
-    } else if (stype==LABELstate) {
-      ASlabelState *ls = dynamic_cast<ASlabelState*>(ast);
-      tc->add(new codeLabel(symTable->getSym(ls->getLabel())->getId()));
-      JVMgenerateStatement::genStatement(ls->getStatement(),tc);
-    } else if (stype==SKIPstate) {
-      // do nothing
-    }*/
   }
-
 }
