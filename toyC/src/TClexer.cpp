@@ -14,7 +14,7 @@ namespace toycalc {
   static char charBuff;
   static std::string line;
   static unsigned int pos;
-  static int lineNum = 0;
+  //static int lineNum = 0;
   static std::string lexeme = ""; 
   static char EOFCHAR = '\0'; // arbitrary non-printing char
   static std::ifstream infile;
@@ -338,6 +338,8 @@ std::string getNextLine() {
   std::getline(infile,line);
   line = line + " ";
   pos = 0; lineNum++;
+  
+  
   // if (verbose) reportDEBUG("","input",lineNum+": "+line);
   return line;
 }

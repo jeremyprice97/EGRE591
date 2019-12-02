@@ -19,6 +19,7 @@ namespace toycalc {
     std::string AUTHOR = "Jeremy Price and Matt Gelber";
 	int is_output = 0;
 	int is_input = 0;
+	int lineNum = 0;
     bool verbose=false;
 
     void turnVerboseOn() { verbose = true; }

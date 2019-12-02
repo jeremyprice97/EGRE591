@@ -1,7 +1,7 @@
 ;
 ; Source file: /mnt/c/school/fall19/egre591/proj/jasmin-2.4/cg.tc
 ; Target file: cg.j
-; Mon Dec  2 11:24:10 2019
+; Mon Dec  2 12:20:25 2019
 ;
 
 .source /mnt/c/school/fall19/egre591/proj/jasmin-2.4/cg.tc
@@ -57,7 +57,7 @@ _label3:
 	goto _label0
 _label1:
 	aload_3
-	iload_2
+	iload_1
 	invokevirtual java/io/PrintStream/println(I)V
 	return
 .end method

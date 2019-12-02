@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "TCoutput.h"
+#include "TCglobals.h"
 /*Provided by Dr. Resler*/
 
 namespace toycalc {
@@ -16,7 +17,7 @@ namespace toycalc {
   void reportSYNTAX_ERROR(TClexer *l, std::string message) {
     int ln; std::string lnstr;
     std::string sep = ": ";
-    std::cerr << (ln=l->getLineNum()) << sep << l->getLine() << std::endl;
+    std::cerr << lineNum << sep << l->getLine() << std::endl;
     lnstr += ln;
     std::cerr <<
       pad(lnstr.length()) << 
@@ -27,7 +28,7 @@ namespace toycalc {
   void reportSEMANTIC_ERROR(TClexer* l,std::string message) {
     int ln; std::string lnstr;
     std::string sep = ": ";
-    std::cerr << (ln=l->getLineNum())<< sep << l->getLine() << std::endl;
+    std::cerr << " " << lineNum << sep << l->getLine() << std::endl;
     lnstr += ln;    
     std::cerr <<
       pad(lnstr.length()) <<

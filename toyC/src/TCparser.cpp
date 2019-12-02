@@ -181,13 +181,8 @@ namespace toycalc{
 	    enteringDEBUG("functionDefinition");
 	    n = functionHeader(argList);
 	    s = functionBody();
-	    std::cout << "LOC: " << loc << "\n" << "TYPE: " << type << "\n";
-	    if(s == NULL) {
-	        std::cout << "S is null\n";
-	    }
-        if(argList == NULL) {
-            std::cout << "S is null\n";
-        }
+	   
+	    
 		f = new ASfuncDef(loc, type, argList, s, n);
         exitingDEBUG("functionDefinition");
         return f;

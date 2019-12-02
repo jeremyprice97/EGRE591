@@ -17,6 +17,7 @@ namespace toycalc {
    
    extern int is_input;
    extern int is_output;
+   extern int lineNum;
 
    extern bool verbose;
 
