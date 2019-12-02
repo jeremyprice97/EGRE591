@@ -104,7 +104,7 @@ namespace toycalc {
 		tc->add(new IF_ICMPEQ(l1));
 		
 		JVMgenerateStatement::genStatement(w_state,tc);
-		tc->add(new POP());
+		//tc->add(new POP());
 		tc->add(new GOTO(l0));
 		tc->add(new codeLabel(l1->toString()+""));
 		

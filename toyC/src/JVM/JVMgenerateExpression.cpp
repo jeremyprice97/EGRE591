@@ -56,21 +56,30 @@ namespace toycalc {
               //JVMgenerateExpression::genExpression(func_expr(i), tc);
           }*/
       } else if (etype == expr) {
+		  int t = 0;
           ASexpr *e = dynamic_cast<ASexpr *>(ast);
-          int t = genExpression(e->getOp1(), tc);
-          genExpression(e->getOp2(), tc);
+          //int t = genExpression(e->getOp1(), tc);
+          //genExpression(e->getOp2(), tc);
           TCtoken *op = e->getOper();
           switch (op->getTokenType()) {
               case ADDOP:
+				  t = genExpression(e->getOp1(), tc);
+				  genExpression(e->getOp2(), tc);
                   JVMgenUtils::gen_ADDOP(*op, tc);
                   break;
               case MULOP:
+				  t = genExpression(e->getOp1(), tc);
+				  genExpression(e->getOp2(), tc);
                   JVMgenUtils::gen_MULOP(*op, tc);
                   break;
               case RELOP:
+				  t = genExpression(e->getOp1(), tc);
+				  genExpression(e->getOp2(), tc);
                   JVMgenUtils::gen_RELOP(*op, tc);
                   break;
               case ASSIGNOP: {
+				  t = 1;
+				  genExpression(e->getOp2(), tc);
                   ASsimpleExpr *exp1 = dynamic_cast<ASsimpleExpr *>(e->getOp1());
                   TCtoken *tok1 = exp1->getExpr();
                   JVMgenUtils::gen_ISTORE(*symTable->getSym(tok1), tc);
