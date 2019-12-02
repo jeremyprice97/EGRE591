@@ -17,7 +17,8 @@ namespace toycalc {
     std::string COMPILER = "toyc";
     std::string VERSION = "v1.0"; 
     std::string AUTHOR = "Jeremy Price and Matt Gelber";
-
+	int is_output = 0;
+	int is_input = 0;
     bool verbose=false;
 
     void turnVerboseOn() { verbose = true; }

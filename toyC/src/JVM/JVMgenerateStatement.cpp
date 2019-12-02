@@ -22,12 +22,16 @@
 //#include "TCtoken.h"
 //#include "TCtokens.h"
 //#include "TCglobals.h"
-
+#include "label.h"
 #include "codeLabel.h"
+#include "IF_ICMPEQ.h"
+#include "POP.h"
+
 
 #include "GOTO.h"
 #include "IFNE.h"
 #include "ICONST_0.h"
+#include "ICONST_1.h"
 #include "RETURN.h"
 #include "INVOKESPECIAL.h"
 #include "INVOKEVIRTUAL.h"
@@ -58,11 +62,24 @@ namespace toycalc {
         ASexpression *if_expr = dynamic_cast<ASexpression*>(if_s->getExpression());
         JVMgenerateExpression::genExpression(if_expr,tc);
         ASstatement *if_state1 = dynamic_cast<ASstatement*>(if_s->getStatement1());
+		tc->add(new ICONST_0());
+		label *l0 = new label(); label *l1 = new label();
+		tc->add(new IF_ICMPEQ(l0));
         JVMgenerateStatement::genStatement(if_state1,tc);
-        if(if_s->getStatement2() != NULL) {
+		tc->add(new ICONST_1());
+		tc->add(new GOTO(l1));
+        tc->add(new codeLabel(l0->toString()+""));
+		tc->add(new ICONST_0());
+		tc->add(new codeLabel(l1->toString()+""));
+		if(if_s->getStatement2() != NULL) {
+			tc->add(new ICONST_1());
+			label *l2 = new label(); //label *l4 = new label();
+			tc->add(new IF_ICMPEQ(l2));
             ASstatement *if_state2 = dynamic_cast<ASstatement *>(if_s->getStatement2());
             JVMgenerateStatement::genStatement(if_state2,tc);
+			tc->add(new codeLabel(l2->toString()+""));
         }
+		else tc->add(new POP());
     } else if (stype == nullState) {                      //edited ifState 11/25
         //ASnullState *ns = dynamic_cast<ASnullState*>(ast);
         tc->add(new ICONST_0());
@@ -111,7 +128,9 @@ namespace toycalc {
 			}
         }
     } else if (stype == newLineState) {                      //edited ifState 11/25
-        //maybe NOP() here?
+		JVMgenUtils::gen_ALOAD(*symTable->getSym(symTable->find("System.out")),tc);
+        tc->add(new LDC("\"\\n\""));
+		tc->add(new INVOKEVIRTUAL(PRINT_STRING_METHOD_SPEC));
     }
 	
 	

@@ -24,6 +24,7 @@
 #include "super_.h"
 #include "throws_.h"
 
+#include "TCglobals.h"
 #include "ALOAD_0.h"
 #include "GETSTATIC.h"
 #include "INVOKESPECIAL.h"
@@ -70,9 +71,9 @@ namespace toycalc {
     gen_stack_limit_directive(tc);
     gen_locals_limit_directive(tc);
 	//std::cout << "In gen main method\n";
-    //if (thereIsInput(definitions,num)) 
+    if (is_input) 
 		gen_input_stream_store(tc);
-    //if (thereIsOutput(definitions,num))
+    if (is_output)
 		gen_output_stream_store(tc);
 	//std::cout << "In gen main method after i/o stream calls\n";
     for (int i=0; i < num; i++) {
@@ -117,9 +118,10 @@ namespace toycalc {
     tc->add(new throws_(IOEXCEPTION));
   }
 
- /* bool JVMgenerateProgram::thereIsInput(ASexpression** exp, int num) {
+ /* bool JVMgenerateProgram::thereIsInput(ASdefinition** defs, int num) {
     for (int i=0; i < num; i++) {
-      ASexpression *ex = exp[i];
+      ASdefinition *def = defs[i];
+	  for(in
       if (ex->getType()==READstate) return true;
       else
        while (ex->getType()==LABELstate) {

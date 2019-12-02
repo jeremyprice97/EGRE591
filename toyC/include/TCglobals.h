@@ -14,6 +14,9 @@ namespace toycalc {
    extern std::string COMPILER;
    extern std::string VERSION; 
    extern std::string AUTHOR;
+   
+   extern int is_input;
+   extern int is_output;
 
    extern bool verbose;
 

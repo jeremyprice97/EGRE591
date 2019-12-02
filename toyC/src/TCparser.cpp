@@ -429,6 +429,7 @@ namespace toycalc{
 		int numID = 0;
 		int loc;
 		int idList[MAX_ID];
+		is_input = 1;
 		TCsymbol *sym;
         enteringDEBUG("readStatement");
 		enter_special_id(symTable,READ);
@@ -471,6 +472,7 @@ namespace toycalc{
 	}
 	
 	ASstatement* TCparser::writeStatement(){
+		is_output = 1; 
 		ASexpression* expressionList[MAX_EXPRESSION];
         enteringDEBUG("writeStatement");
 		enter_special_id(symTable,WRITE);
