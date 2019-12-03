@@ -2,6 +2,7 @@
 #include <string>
 
 #include "JVMgenerateExpression.h"
+#include "INVOKESTATIC.h"
 
 #include "ASexpression.h"
 #include "ASexpr.h"
@@ -40,13 +41,23 @@ namespace toycalc {
       } else if (etype == funcCall) {
           /*ASfuncCall *call_s = dynamic_cast<ASfuncCall*>(ast);
           //ASsimpleExpr *simp_expr = dynamic_cast<ASsimpleExpr*>(call_s->getID());
-          //JVMgenerateExpression::genExpression(simp_expr,tc);
-          genExpression(call_s->getID(),tc);
+          int nameLoc = call_s->getID();
+          //TCtoken *to = simp_expr->getExpr();
+          //std::string lex = to->getLexeme();
+          //TCsymbol *callID = symTable->getSym(symTable->find(lex));
+          //JVMgenUtils::gen_ILOAD(*callID, tc);
           int num = call_s->getNumExpressions();
+          INVOKESTATIC *invs = new INVOKESTATIC(symTable->getSym(nameLoc)->getId(),"I");
+          invs->addArgList(num);
+          tc->add(invs);
+
+          //JVMgenerateExpression::genExpression(simp_expr,tc);
+          //genExpression(call_s->getID(),tc);
+          //int num = call_s->getNumExpressions();
           for(int i=0; i < num; i++) {
-              //ASexpression *func_expr = dynamic_cast<ASexpression *>(call_s->getExpression());
-              genExpression(call_s->getExpression(i), tc);
-              //JVMgenerateExpression::genExpression(func_expr(i), tc);
+              //ASexpression *func_expr = dynamic_cast<ASexpression *>(call_s->getExpression(i));
+              //genExpression(call_s->getExpression(i), tc);
+              JVMgenerateExpression::genExpression(call_s->getExpression(i), tc);
           }*/
       } else if (etype == expr) {
 		  int t = 0;

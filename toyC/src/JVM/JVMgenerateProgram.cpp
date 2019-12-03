@@ -1,8 +1,9 @@
 #include <iostream>
+#include <string>
 
 #include "ASprogram.h"
 #include "ASstatement.h"
-//#include "ASlabelState.h"
+#include "ASfuncDef.h"
 #include "JVMtargetCode.h"
 #include "JVMgenerateProgram.h"
 #include "JVMgenerateDefinition.h"
@@ -29,6 +30,7 @@
 #include "GETSTATIC.h"
 #include "INVOKESPECIAL.h"
 #include "RETURN.h"
+#include "IRETURN.h"
 #include "DUP.h"
 #include "NEW.h"
 #include "RETURN.h"
@@ -40,7 +42,11 @@ namespace toycalc {
   void JVMgenerateProgram::genProgram(ASprogram *ast,JVMtargetCode *tc) {
     genIntro(tc);
     genConstructor(tc);
-    genMainMethod(ast->getDefinitionList(),ast->getNumDefinitions(),tc);
+    int num = ast->getNumDefinitions();
+    for(int i = 0; i < num - 1; i++) {
+        genFuncMethod(ast->getDefinition(i), tc);
+    }
+    genMainMethod(ast->getDefinition(num-1),tc);
   }
 
   void JVMgenerateProgram::genIntro(JVMtargetCode *tc) {
@@ -65,7 +71,17 @@ namespace toycalc {
     tc->add(new blankLine());
   }
 
-  void JVMgenerateProgram::genMainMethod(ASdefinition** definitions,int num,JVMtargetCode* tc) {
+  void JVMgenerateProgram::genFuncMethod(ASdefinition* definition,JVMtargetCode* tc) {
+    gen_func_header(definition,tc);
+    gen_stack_limit_directive(tc);
+    gen_locals_limit_directive(tc);
+    JVMgenerateDefinition::genDefinition(definition,tc);
+    tc->add(new IRETURN());
+    tc->add(new end());
+    tc->add(new blankLine());
+  }
+
+  void JVMgenerateProgram::genMainMethod(ASdefinition* definition,JVMtargetCode* tc) {
     gen_main_header(tc);
     gen_stack_limit_directive(tc);
     gen_locals_limit_directive(tc);
@@ -73,10 +89,10 @@ namespace toycalc {
 		gen_input_stream_store(tc);
     if (is_output)
 		gen_output_stream_store(tc);
-    for (int i=0; i < num; i++) {
-      JVMgenerateDefinition::genDefinition(definitions[i],tc);
-    }
-    tc->add(new RETURN());
+    //for (int i=0; i < num; i++) {
+      JVMgenerateDefinition::genDefinition(definition,tc);
+    //}
+    tc->add(new IRETURN());
     tc->add(new end());
   }
 
@@ -102,8 +118,19 @@ namespace toycalc {
     tc->add(new super_(parent));
   }
 
+  void JVMgenerateProgram::gen_func_header(ASdefinition* def,JVMtargetCode* tc) {
+    ASfuncDef *fd = dynamic_cast<ASfuncDef *>(def);
+    int ID = fd->getID();
+    std::string name = symTable->getSym(ID)->getId();
+    method *m = new method(name, "I");
+    m->addArg(fd->getNumVarDefs());
+    m->addAccessSpec("public");
+    m->addAccessSpec("static");
+    tc->add(m);
+  }
+
   void JVMgenerateProgram::gen_main_header(JVMtargetCode* tc) {
-    method *m = new method("main", "V");
+    method *m = new method("main", "I");
     m->addArg("[Ljava/lang/String;");
     m->addAccessSpec("public");
     m->addAccessSpec("static");

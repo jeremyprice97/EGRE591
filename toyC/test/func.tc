@@ -1,0 +1,9 @@
+int one(int a){
+    return a+1;
+}
+
+int main(){
+    int x;
+    x = 4;
+    //x = one(x);
+}

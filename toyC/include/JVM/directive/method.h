@@ -19,6 +19,7 @@ namespace toycalc {
     method(std::string, std::string);
     void addAccessSpec(std::string);
     void addArg(std::string);
+    void addArg(int);
     std::string toString();
   };
 }

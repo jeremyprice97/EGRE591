@@ -1,17 +1,9 @@
 #include <iostream>
-#include "JVMinstruction.h"
-#include "JVMlineOfCode.h"
+#include "IRETURN.h"
 
 namespace toycalc {
 
-  class IRETURN : public JVMinstruction, JVMlineOfCode {
-  public:
-
-    IRETURN() { }
-    std::string toString() {
-      return "\tireturn";
-    }
-  };
+    IRETURN::IRETURN() { }
+    std::string IRETURN::toString() { return "\tireturn"; }
 
 }
-

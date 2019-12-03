@@ -88,7 +88,7 @@ namespace toycalc {
             ASexpression *r_expr = dynamic_cast<ASexpression*>(rs->getExpression());
             JVMgenerateExpression::genExpression(r_expr,tc);
 	    }
-	    tc->add(new RETURN());
+	    //tc->add(new RETURN());
     } else if (stype == whileState) {
 		label *l0 = new label(); label *l1 = new label();
         ASwhileState *ws = dynamic_cast<ASwhileState*>(ast);

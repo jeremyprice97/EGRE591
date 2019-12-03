@@ -15,6 +15,16 @@ namespace toycalc {
     args[numArgs++] = arg;
   }
 
+  void INVOKESTATIC::addArgList(int argNum) {
+    if(numArgs==MAX_INVOKESTATIC_ARGS) {
+        printf("INTERNAL ERROR: too many args for INVOKESTATIC\n");
+        exit(EXIT_FAILURE);
+    }
+    for(numArgs = 0; numArgs < argNum; numArgs++) {
+        args[numArgs] = "I";
+    }
+  }
+
   std::string INVOKESTATIC::toString() {
     std::string s = "\tinvokestatic " + name + "(";
     if (numArgs != 0)

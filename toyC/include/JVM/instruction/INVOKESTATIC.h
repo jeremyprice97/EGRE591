@@ -18,6 +18,7 @@ namespace toycalc {
     
     INVOKESTATIC(std::string,std::string);
     void addArg(std::string);
+    void addArgList(int);
     std::string toString();
   };
 
