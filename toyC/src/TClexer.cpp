@@ -291,18 +291,18 @@ namespace toycalc {
       }
       if((ch == '/') && (line[pos+1] == '*')) {									//this case added my Matthew and Jeremy
           blockCommentCount++;
-          pos++;
-          while(!((ch == '*') && (line[pos+1] == '/')) || blockCommentCount>1) {
-			  //std::cout << blockCommentCount << std::endl;
-              if((ch == '/') && (line[pos+1] == '*')) {
+          pos += 2;
+          while(!((line[pos] == '*') && (line[pos+1] == '/')) || blockCommentCount>1) {
+              if((line[pos] == '/') && (line[pos+1] == '*')) {
                   blockCommentCount++;
+                  pos++;
               }
-              if((ch == '*') && (line[pos+1] == '/')) {
+              else if((line[pos] == '*') && (line[pos+1] == '/')) {
                   blockCommentCount--;
+                  pos++;
               }
               pos++;
               if (line.empty() || pos > line.length()) line = getNextLine();
-              ch = line[pos];
           }
           blockCommentCount--;
           pos += 2;

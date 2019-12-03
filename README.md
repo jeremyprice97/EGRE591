@@ -11,7 +11,8 @@ Part 2: completed
     - parser
     - abstract syntax tree
 
-Part 3: in progress
+Part 3: completed
+    - **********NO Function Calls********
     - code generation
 
 Documentation for part 3:

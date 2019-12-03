@@ -1,7 +1,5 @@
-(((
-/* comment #1
-/* comment #2
-//testing line comment here
-/* comment #3
-*/ */ */
-}}}
+/*/* //testing*/ */
+int main(){
+    int x;
+    x = 4;
+}

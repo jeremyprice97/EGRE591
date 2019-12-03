@@ -1,3 +1,13 @@
+/****************************************************
+ *
+ * Project: EGRE 591: Compiler Construction Project
+ *
+ * Group Members: Matthew Gelber and Jeremy Price
+ *
+ * Part 3: NO Functions Calls were implemented
+ *
+ ****************************************************/
+
 #include <iostream>
 #include <sstream>
 #include <vector>
