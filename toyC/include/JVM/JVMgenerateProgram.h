@@ -20,13 +20,11 @@ class JVMgenerateProgram {
      static void genProgram(ASprogram*,JVMtargetCode*);
      static void genIntro(JVMtargetCode*);
      static void genConstructor(JVMtargetCode*);
-     static void genFuncMethod(ASdefinition*,JVMtargetCode*);
-     static void genMainMethod(ASdefinition*,JVMtargetCode*);
+     static void genMainMethod(ASdefinition**,int,JVMtargetCode*);
      static void gen_intro_comments(std::string,std::string,JVMtargetCode*);
      static void gen_source_directive(std::string,JVMtargetCode*);
      static void gen_class_directive(std::string,JVMtargetCode*); 
      static void gen_super_directive(std::string,JVMtargetCode*);
-     static void gen_func_header(ASdefinition*,JVMtargetCode*);
      static void gen_main_header(JVMtargetCode*);
      static void gen_throws_directive(JVMtargetCode*);
      static bool thereIsInput(ASstatement**,int);
