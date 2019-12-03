@@ -23,7 +23,9 @@ namespace toycalc {
         return s;
 
     }
-
+	void ASexpr::setOp2(ASexpression* op) {
+		op2 = op;
+	}
     ASexpression* ASexpr::getOp1() { return op1; }
     ASexpression* ASexpr::getOp2() { return op2; }
     TCtoken* ASexpr::getOper() { return oper; }

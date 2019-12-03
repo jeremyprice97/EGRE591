@@ -498,24 +498,19 @@ namespace toycalc{
 		ASexpression* e1 = NULL;
 		ASexpression* e2 = NULL;
 		ASexpression* e3 = NULL;
-		TCtoken* t1 = NULL;
-		TCtoken* t2 = NULL;
+		ASexpr* e = NULL;
+		int was_here = 0;
+		TCtoken* t = NULL;
         enteringDEBUG("expression");
-        e1 = relopExpression();
-		if (buff->getTokenType() == ASSIGNOP) {
-			t1 = buff;
-			buff = scanner->getToken();
-			e2 = relopExpression();
-			while(buff->getTokenType() == ASSIGNOP){
-				t2 = buff;
-				buff = scanner->getToken();
-				e3 = relopExpression();
-				e2 = new ASexpr(t2, e2, e3);
-             }
-			 e1 = new ASexpr(t1, e1, e2);
-		}
+        e1 = relopExpression();			//left side (x)
 		
-         
+		while(buff->getTokenType() == ASSIGNOP){
+			t = buff;
+			buff = scanner->getToken();
+			e2 = expression();
+			e1 = new ASexpr(t, e1, e2);
+			
+		}	
         exitingDEBUG("expression");
         return e1;
 	}

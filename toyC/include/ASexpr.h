@@ -12,6 +12,7 @@ namespace toycalc {
         std::string toString();
         ASexpression* getOp1();
         ASexpression* getOp2();
+		void setOp2(ASexpression*);
         TCtoken* getOper();
 
     private:
