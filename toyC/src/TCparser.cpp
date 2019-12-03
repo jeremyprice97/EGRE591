@@ -77,11 +77,6 @@ Operator -> + | − | ∗ | / | % | || | && | <= | < | = | > | >= | ! =
 
 */
 
-//todo: uncomment semantic actions
-//todo: check "Subroutine parameters and/or return types must agree in number and type"
-//todo: check "All expressions must be type compatible."
-//todo: check "Division by zero is undefined."
-
 namespace toycalc{
 	
 	//static void checkIfAllLabelTargetsAreDefined(ASprogram*);

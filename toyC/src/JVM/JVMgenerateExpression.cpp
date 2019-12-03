@@ -19,8 +19,6 @@
 #include "INEG.h"
 #include "LDC.h"
 
-//todo: finish funcCall -> added some code, some questions about the logic and how to go about it
-
 namespace toycalc {
   int JVMgenerateExpression::genExpression(ASexpression *ast,JVMtargetCode *tc) {
       enum exprType etype = ast->getType();

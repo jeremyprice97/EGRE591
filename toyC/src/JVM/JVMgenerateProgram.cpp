@@ -33,7 +33,6 @@
 #include "NEW.h"
 #include "RETURN.h"
 
-//todo: fix gen_stack_limit_directive(tc) AND gen_locals_limit_directive(tc);
 
 namespace toycalc {
 
