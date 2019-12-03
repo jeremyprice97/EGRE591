@@ -32,7 +32,7 @@
 #include "IFNE.h"
 #include "ICONST_0.h"
 #include "ICONST_1.h"
-#include "RETURN.h"
+#include "IRETURN.h"
 #include "INVOKESPECIAL.h"
 #include "INVOKEVIRTUAL.h"
 #include "LDC.h"
@@ -88,7 +88,7 @@ namespace toycalc {
             ASexpression *r_expr = dynamic_cast<ASexpression*>(rs->getExpression());
             JVMgenerateExpression::genExpression(r_expr,tc);
 	    }
-	    //tc->add(new RETURN());
+	    tc->add(new IRETURN());
     } else if (stype == whileState) {
 		label *l0 = new label(); label *l1 = new label();
         ASwhileState *ws = dynamic_cast<ASwhileState*>(ast);
