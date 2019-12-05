@@ -4,7 +4,7 @@
 #include "CGtargetCode.h"
 #include "JVMlineOfCode.h"
 
-#define MAXLINESOFCODE 500
+#define MAXLINESOFCODE 20000
 
 namespace toycalc {
   

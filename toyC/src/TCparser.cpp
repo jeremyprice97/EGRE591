@@ -6,6 +6,7 @@
 #include "TCoutput.h"
 #include "TCglobals.h"
 #include "TCtokens.h"
+#include "TCtoken.h"
 #include "TCsymbol.h"
 #include "TCsymTable.h"
 
@@ -503,6 +504,37 @@ namespace toycalc{
 			t = buff;
 			buff = scanner->getToken();
 			e2 = expression();
+			if(e2->getType() == simpleExpr) {
+				ASsimpleExpr* e2_e = dynamic_cast<ASsimpleExpr*>(e2);
+				if(e2_e->getExpr()->getTokenType() == STRING) {
+					reportSEMANTIC_ERROR(scanner,"Invalid assignment: arg2 = type STRING");
+					exit(EXIT_FAILURE);
+				}
+				else if (e2_e->getExpr()->getTokenType() == ID) {
+					if(e2_e->getId()->getType() == FUNC) {
+						reportSEMANTIC_ERROR(scanner,"Invalid assignment: operand is a function name");
+						exit(EXIT_FAILURE);
+					}
+				}
+			}
+			if(e1->getType() == simpleExpr) {
+				ASsimpleExpr* e1_e = dynamic_cast<ASsimpleExpr*>(e1);
+				if(e1_e->getExpr()->getTokenType() == STRING) {
+					reportSEMANTIC_ERROR(scanner,"Invalid assignment: target = type STRING");
+					exit(EXIT_FAILURE);
+				}
+				else if (e1_e->getExpr()->getTokenType() == ID) {
+					if(e1_e->getId()->getType() == FUNC) {
+						reportSEMANTIC_ERROR(scanner,"Invalid assignment: target is function name");
+						exit(EXIT_FAILURE);
+					}
+				}	
+			}
+			else {
+				reportSEMANTIC_ERROR(scanner,"Invalid assignment: target != ID");
+				exit(EXIT_FAILURE);
+			}
+			
 			e1 = new ASexpr(t, e1, e2);
 			
 		}	
@@ -520,6 +552,32 @@ namespace toycalc{
 			t = buff;
             buff = scanner->getToken();
 			e2 = simpleExpression();
+			if(e2->getType() == simpleExpr) {
+				ASsimpleExpr* e2_e = dynamic_cast<ASsimpleExpr*>(e2);
+				if(e2_e->getExpr()->getTokenType() == STRING) {
+					reportSEMANTIC_ERROR(scanner,"Invalid comparison: arg2 = type STRING");
+					exit(EXIT_FAILURE);
+				}
+				else if (e2_e->getExpr()->getTokenType() == ID) {
+					if(e2_e->getId()->getType() == FUNC) {
+						reportSEMANTIC_ERROR(scanner,"Invalid assignment: operand is a function name");
+						exit(EXIT_FAILURE);
+					}
+				}
+			}
+			if(e1->getType() == simpleExpr) {
+				ASsimpleExpr* e1_e = dynamic_cast<ASsimpleExpr*>(e1);
+				if(e1_e->getExpr()->getTokenType() == STRING) {
+					reportSEMANTIC_ERROR(scanner,"Invalid comparison: arg1 = type STRING");
+					exit(EXIT_FAILURE);
+				}
+				else if (e1_e->getExpr()->getTokenType() == ID) {
+					if(e1_e->getId()->getType() == FUNC) {
+						reportSEMANTIC_ERROR(scanner,"Invalid assignment: target is function name");
+						exit(EXIT_FAILURE);
+					}
+				}
+			}
             e1 = new ASexpr(t, e1, e2);
         }
         
@@ -537,6 +595,32 @@ namespace toycalc{
 			t = buff;
             buff = scanner->getToken();
 			e2 = term();
+			if(e2->getType() == simpleExpr) {
+				ASsimpleExpr* e2_e = dynamic_cast<ASsimpleExpr*>(e2);
+				if(e2_e->getExpr()->getTokenType() == STRING) {
+					reportSEMANTIC_ERROR(scanner,"Invalid operation argument: arg2 = type STRING");
+					exit(EXIT_FAILURE);
+				}
+				else if (e2_e->getExpr()->getTokenType() == ID) {
+					if(e2_e->getId()->getType() == FUNC) {
+						reportSEMANTIC_ERROR(scanner,"Invalid assignment: operand is a function name");
+						exit(EXIT_FAILURE);
+					}
+				}
+			}
+			if(e1->getType() == simpleExpr) {
+				ASsimpleExpr* e1_e = dynamic_cast<ASsimpleExpr*>(e1);
+				if(e1_e->getExpr()->getTokenType() == STRING) {
+					reportSEMANTIC_ERROR(scanner,"Invalid operation: arg1 = type STRING");
+					exit(EXIT_FAILURE);
+				}
+				else if (e1_e->getExpr()->getTokenType() == ID) {
+					if(e1_e->getId()->getType() == FUNC) {
+						reportSEMANTIC_ERROR(scanner,"Invalid assignment: target is function name");
+						exit(EXIT_FAILURE);
+					}
+				}
+			}
             e1 = new ASexpr(t, e1, e2);
         }
        
@@ -554,17 +638,46 @@ namespace toycalc{
 			t = buff;
             buff = scanner->getToken();
 			e2 = primary();
-			
-			if (e2->getType() == simpleExpr) {
-				ASsimpleExpr* s_e2 = (ASsimpleExpr*)e2;
-				if (s_e2->getExpr()->getTokenType() == NUMBER) {
-					if(s_e2->getExpr()->getLexeme() == "0") {
-						reportSEMANTIC_ERROR(scanner, "divide by 0 undefined");
+			if(e2->getType() == simpleExpr) {
+				ASsimpleExpr* e2_e = dynamic_cast<ASsimpleExpr*>(e2);
+				if(e2_e->getExpr()->getTokenType() == STRING) {
+					reportSEMANTIC_ERROR(scanner,"Invalid operation: arg2 = type STRING");
+					exit(EXIT_FAILURE);
+				}
+				else if (e2_e->getExpr()->getTokenType() == ID) {
+					if(e2_e->getId()->getType() == FUNC) {
+						reportSEMANTIC_ERROR(scanner,"Invalid assignment: operand is a function name");
 						exit(EXIT_FAILURE);
 					}
 				}
 			}
-            e1 = new ASexpr(t, e1, e2);
+			if(e1->getType() == simpleExpr) {
+				ASsimpleExpr* e1_e = dynamic_cast<ASsimpleExpr*>(e1);
+				if(e1_e->getExpr()->getTokenType() == STRING) {
+					reportSEMANTIC_ERROR(scanner,"Invalid operation: arg1 = type STRING");
+					exit(EXIT_FAILURE);
+				}
+				else if (e1_e->getExpr()->getTokenType() == ID) {
+					if(e1_e->getId()->getType() == FUNC) {
+						reportSEMANTIC_ERROR(scanner,"Invalid assignment: target is function name");
+						exit(EXIT_FAILURE);
+					}
+				}
+			}
+			e1 = new ASexpr(t, e1, e2);
+			ASexpr* e_check = dynamic_cast<ASexpr*>(e1);
+			if (e_check->getOper()->getLexeme() == "/") {
+				if (e2->getType() == simpleExpr) {
+					ASsimpleExpr* s_e2 = (ASsimpleExpr*)e2;
+					if (s_e2->getExpr()->getTokenType() == NUMBER) {
+						if(s_e2->getExpr()->getLexeme() == "0") {
+							reportSEMANTIC_ERROR(scanner, "divide by 0 undefined");
+							exit(EXIT_FAILURE);
+						}
+					}
+				}
+			}
+           // e1 = new ASexpr(t, e1, e2);
         }
         exitingDEBUG("term");
         return e1;
@@ -590,6 +703,11 @@ namespace toycalc{
 			
             buff = scanner->getToken();
             if(buff->getTokenType() != LPAREN) {
+				sym = symTable->getSym(t);
+				if(sym->getType() == FUNC) {
+					reportSEMANTIC_ERROR(scanner,"Function name not used in function call");
+					exit(EXIT_FAILURE);
+				}
 				e = new ASsimpleExpr(t);
 				exitingDEBUG("primary");
 				return e;
@@ -671,9 +789,10 @@ namespace toycalc{
 		if (t == buff->getTokenType())
 			buff = scanner->getToken();
 		else {
+			TCtoken* t_error = new TCtoken(t);
 			std::string str="";
 			str += t;
-			reportSYNTAX_ERROR(scanner,str+" expected");
+			reportSYNTAX_ERROR(scanner,t_error->toString()+" expected");
 			exit(EXIT_FAILURE);
 		}
 	}

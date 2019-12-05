@@ -27,6 +27,7 @@ namespace toycalc {
 		ASfuncDef *fd = dynamic_cast<ASfuncDef*>(ast);
 		ASstatement *statement = fd->getStatement();
 		JVMgenerateStatement::genStatement(statement, tc);
+		//std::cout << "def end" << std::endl;
 	} else if (dtype == varDef) {
 		
 	}

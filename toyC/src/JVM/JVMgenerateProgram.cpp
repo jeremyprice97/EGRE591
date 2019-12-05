@@ -23,6 +23,7 @@
 #include "class_.h"
 #include "super_.h"
 #include "throws_.h"
+#include "TCsymbol.h"
 
 #include "TCglobals.h"
 #include "ALOAD_0.h"
@@ -74,7 +75,9 @@ namespace toycalc {
 		gen_output_stream_store(tc);
     for (int i=0; i < num; i++) {
       JVMgenerateDefinition::genDefinition(definitions[i],tc);
-    }
+		//std::cout << "end of defs" << std::endl;
+	}
+	
     tc->add(new RETURN());
     tc->add(new end());
   }
@@ -131,7 +134,7 @@ namespace toycalc {
   }
 
   void JVMgenerateProgram::gen_locals_limit_directive(JVMtargetCode *tc){
-      tc->add(new limit("locals",10)); // arbitrary, for now
+      tc->add(new limit("locals",TCsymbol::getNextOffset())); // arbitrary, for now
   }
 
 }

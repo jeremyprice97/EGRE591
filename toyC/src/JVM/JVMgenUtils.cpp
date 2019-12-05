@@ -135,7 +135,8 @@ namespace toycalc {
   void JVMgenUtils::gen_MULOP(TCtoken tok, JVMtargetCode *tc) {
     if (tok.getLexeme()=="*")        tc->add(new IMUL());
     else if (tok.getLexeme()=="/")   tc->add(new IDIV());
-    else if (tok.getLexeme()=="%")   tc->add(new IREM());
+    else if (tok.getLexeme()=="%")   { //std::cout << "rem?"<< std::endl; 
+	tc->add(new IREM()); }
     else if (tok.getLexeme()=="&&")  gen_AND(tok, tc);
     else { // shouldn't happen
       std::cerr << "Error: gen_MULOP: internal error" << std::endl;

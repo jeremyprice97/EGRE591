@@ -57,6 +57,7 @@ namespace toycalc {
         for(int i=0; i < num; i++) {
             JVMgenerateStatement::genStatement(bs->getStatement(i),tc);
         }
+		//std::cout << "blockState end" << std::endl;
     } else if (stype == ifState) {
         ASifState *if_s = dynamic_cast<ASifState*>(ast);
         ASexpression *if_expr = dynamic_cast<ASexpression*>(if_s->getExpression());
@@ -81,14 +82,14 @@ namespace toycalc {
         }
 		else tc->add(new POP());
     } else if (stype == nullState) {
-        tc->add(new ICONST_0());
+       // tc->add(new ICONST_0());
     } else if (stype == returnState) {
-	    ASreturnState *rs = dynamic_cast<ASreturnState*>(ast);
-	    if(rs->getExpression() != NULL){
-            ASexpression *r_expr = dynamic_cast<ASexpression*>(rs->getExpression());
-            JVMgenerateExpression::genExpression(r_expr,tc);
-	    }
-	    tc->add(new IRETURN());
+	    //ASreturnState *rs = dynamic_cast<ASreturnState*>(ast);
+	    //if(rs->getExpression() != NULL){
+        //    ASexpression *r_expr = dynamic_cast<ASexpression*>(rs->getExpression());
+        //    JVMgenerateExpression::genExpression(r_expr,tc);
+	    //}
+	    //tc->add(new IRETURN());
     } else if (stype == whileState) {
 		label *l0 = new label(); label *l1 = new label();
         ASwhileState *ws = dynamic_cast<ASwhileState*>(ast);
@@ -115,6 +116,7 @@ namespace toycalc {
             JVMgenUtils::gen_ISTORE(*symTable->getSym(read_s->getID(i)), tc);
         }
     } else if (stype == writeState) {
+		//std::cout << "write state begin" << std::endl;
         ASwriteState *write_s = dynamic_cast<ASwriteState*>(ast);
         int num = write_s->getNumExpressions();
         for(int i=0; i < num; i++) {
@@ -125,9 +127,10 @@ namespace toycalc {
 				tc->add(new INVOKEVIRTUAL(PRINT_STRING_METHOD_SPEC));
 			}
 			else {
-				tc->add(new INVOKEVIRTUAL(PRINT_INT_NEWLINE_METHOD_SPEC));
+				tc->add(new INVOKEVIRTUAL(PRINT_INT_METHOD_SPEC));
 			}
         }
+		//std::cout << "write state end" << std::endl;
     } else if (stype == newLineState) {
 		JVMgenUtils::gen_ALOAD(*symTable->getSym(symTable->find("System.out")),tc);
         tc->add(new LDC("\"\\n\""));

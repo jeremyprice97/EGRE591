@@ -73,33 +73,38 @@ namespace toycalc {
                   JVMgenUtils::gen_MULOP(*op, tc);
                   break;
               case RELOP:
+				  //std::cout << "relop begin" << std::endl;
 				  t = genExpression(e->getOp1(), tc);
 				  genExpression(e->getOp2(), tc);
                   JVMgenUtils::gen_RELOP(*op, tc);
+				 // std::cout << "relop end: " << op->getLexeme() <<std::endl;
                   break;
               case ASSIGNOP: {
 				  t = 1;
-				  genExpression(e->getOp2(), tc);
-				  ASexpression *op2_e = dynamic_cast<ASexpression*>(e->getOp2());
-				  if ((op2_e->getType() != simpleExpr)) {
-					ASexpr *op2_e_expr = dynamic_cast<ASexpr *>(e->getOp2());  
-					genExpression(op2_e_expr->getOp1(), tc);
-				  }
-				  else {
-					//std::cout << "CODE GEN - ERROR, assign target not a variable" << std::endl;
-				  }
-				  ASexpression *op1_e = dynamic_cast<ASexpression*>(e->getOp1());	  
 				  
+				 				  
+				  ASexpression *op2_e = dynamic_cast<ASexpression*>(e->getOp2());
+				  ASexpression *op1_e = dynamic_cast<ASexpression*>(e->getOp1());
+				  
+				  if (op2_e->getType() == expr) {
+					  genExpression(e->getOp2(), tc); 
+					  ASexpr* op2_assign = dynamic_cast<ASexpr*>(op2_e);
+					  if(op2_assign->getOper()->getTokenType() == ASSIGNOP) {
+						  if(op2_assign->getOp1()->getType() == simpleExpr) {
+							ASsimpleExpr *op2_sim = dynamic_cast<ASsimpleExpr *>(op2_assign->getOp1()); 
+							TCtoken* tok2 = op2_sim->getExpr();
+							JVMgenUtils::gen_ILOAD(*symTable->getSym(tok2), tc);
+						  }
+					  }
+				  }
+				  else  {
+					genExpression(e->getOp2(), tc); 
+				  }
 				  if (op1_e->getType() == simpleExpr) {
 					ASsimpleExpr *exp1 = dynamic_cast<ASsimpleExpr *>(e->getOp1());
 					TCtoken *tok1 = exp1->getExpr();
 					JVMgenUtils::gen_ISTORE(*symTable->getSym(tok1), tc);
-				  }
-				  else {
-					  
-					genExpression(e->getOp1(), tc);
-					
-				  } 
+				  }				  
                   } break;
               default: // shouldn't happen
                   std::cerr << "Fatal internal error #1: JVMgenerateExpression" << std::endl;
@@ -107,10 +112,12 @@ namespace toycalc {
           }
 		  return t;
       } else if (etype == minus){
+		 // std::cout << "minus begin" << std::endl;
           ASminus *minus_s = dynamic_cast<ASminus*>(ast);
           ASexpression *min_expr = dynamic_cast<ASexpression*>(minus_s->getExpression());
           int t = genExpression(min_expr,tc);
           tc->add(new INEG());
+		 // std::cout << "minus end" << std::endl;
 		  return t;
       } else if (etype == NoT) {
           ASnot *not_s = dynamic_cast<ASnot*>(ast);

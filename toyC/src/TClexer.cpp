@@ -217,7 +217,7 @@ namespace toycalc {
 						  lexeme += charBuff;
 						  t = new TCtoken(STRING,lexeme); charBuff = getChar(); break;
 					  } else {
-						  lexeme += charBuff; charBuff = getChar();
+						  //lexeme += charBuff; charBuff = getChar();
 						  do {
 							lexeme += charBuff; charBuff = getChar();
 						  } while(charBuff != '\"');
